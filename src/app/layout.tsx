@@ -5,6 +5,7 @@ import {NextIntlClientProvider} from 'next-intl'
 import {getLocale, getMessages} from 'next-intl/server'
 import {type ReactNode} from 'react'
 
+import {aptlyFont, golosFont} from '~/assets/fonts'
 import SessionWrapper from '~/components/SessionProvider'
 import {TRPCReactProvider} from '~/trpc/react'
 
@@ -22,8 +23,10 @@ export default async function RootLayout({children}: Readonly<{children: ReactNo
   const messages = await getMessages()
 
   return (
-    <html lang={locale}>
-      <body>
+    <html lang={locale} className='dark scroll-smooth bg-background'>
+      <body
+        className={`selection:bg-primary-dark selection:text-primary-light scrollbar-hide m-0 flex min-h-screen flex-col font-sans text-white ${aptlyFont.variable} ${golosFont.variable}`}
+      >
         <SessionWrapper>
           <TRPCReactProvider>
             <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>

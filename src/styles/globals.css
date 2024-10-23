@@ -1,27 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --background: 0 0% 96%;
+    --foreground: 258, 72%, 7%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
+    --primary: 46.8 92.8% 67.5%;
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.5%;
-    --secondary-foreground: 240 5.9% 10%;
+    --secondary-foreground: 291.1 57.5% 58.4%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
     --accent: 60 95% 48%;
     --accent-foreground: 240 5.9% 10%;
-    --destructive: 4 85% 43%;
+    --destructive: 359, 86%, 53%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
@@ -43,21 +40,21 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 98%;
+    --background: 258, 72%, 7%;
+    --foreground: 0 0% 96%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 0 0% 9%;
+    --primary-foreground: 46.8 92.8% 67.5%;
+    --secondary: 291.1 57.5% 58.4%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
     --accent: 60 86% 50%;
     --accent-foreground: 0 0% 98%;
-    --destructive: 4 85% 43%;
+    --destructive: 359, 86%, 53%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;

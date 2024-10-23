@@ -9,6 +9,11 @@ const withNextIntl = createNextIntlPlugin()
 
 /** @type {import("next").NextConfig} */
 const config = {
+  compiler: {
+    removeConsole: {
+      exclude: ['error', 'warn'],
+    },
+  },
   images: {
     remotePatterns: [
       {
@@ -27,13 +32,16 @@ const config = {
     },
   ],
   webpack(webpackConfig) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     webpackConfig.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     webpackConfig.ignoreWarnings = [{module: /@opentelemetry\/instrumentation/}]
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return webpackConfig
   },
 }

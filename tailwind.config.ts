@@ -1,15 +1,18 @@
-import {fontFamily} from 'tailwindcss/defaultTheme'
+import type {Config} from 'tailwindcss/types/config'
 import tailwindcssAnimate from 'tailwindcss-animate'
-import {withUt} from 'uploadthing/tw'
+// import {withUt} from 'uploadthing/tw'
 
-export default withUt({
+const config: Config = {
   darkMode: ['class'],
   content: ['./src/**/*.tsx'],
   theme: {
     extend: {
       fontFamily: {
-        bebasNeue: ['Bebas Neue', ...fontFamily.serif],
-        anton: ['Anton', ...fontFamily.serif],
+        sans: ['var(--font-golos)'],
+        title: ['var(--font-aptly)'],
+        chinese: ['var(noto-sans-chinese)'],
+        hebrew: ['var(noto-sans-hebrew)'],
+        japanese: ['var(noto-sans-japanese)'],
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -17,6 +20,28 @@ export default withUt({
         sm: 'calc(var(--radius) - 4px)',
       },
       colors: {
+        pink: '#C058D2',
+        yellow: {
+          300: '#FFE37E',
+          DEFAULT: '#F9D75F',
+          500: '#F6C944',
+          600: '#7E7552',
+        },
+        gray: {
+          100: '#DCDEE9',
+          200: '#9698AF',
+          DEFAULT: '#65636E',
+          400: '#474A69',
+        },
+        dark: {
+          400: '#262432',
+          500: '#111516',
+          600: '#08001A',
+        },
+        backgroundImage: {
+          // TODO does this work
+          'gradient-primary': `linear-gradient(to bottom left, var(--primary) 25%, var(--secondary) 92%)`,
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -75,4 +100,6 @@ export default withUt({
     },
   },
   plugins: [tailwindcssAnimate],
-})
+}
+
+export default config
