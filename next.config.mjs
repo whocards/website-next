@@ -1,6 +1,9 @@
-import {env} from './src/env.js'
+// @ts-check
+
 import {withSentryConfig} from '@sentry/nextjs'
 import createNextIntlPlugin from 'next-intl/plugin'
+
+import {env} from './src/env.js'
 
 const withNextIntl = createNextIntlPlugin()
 

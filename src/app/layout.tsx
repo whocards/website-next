@@ -6,7 +6,8 @@ import {getLocale, getMessages} from 'next-intl/server'
 import {type ReactNode} from 'react'
 
 import SessionWrapper from '~/components/SessionProvider'
-// import {TRPCReactProvider} from '~/trpc/react'
+import {TRPCReactProvider} from '~/trpc/react'
+
 export const metadata: Metadata = {
   title: 'WhoCards',
   description: 'Do you dare?',
@@ -24,9 +25,9 @@ export default async function RootLayout({children}: Readonly<{children: ReactNo
     <html lang={locale}>
       <body>
         <SessionWrapper>
-          {/* <TRPCReactProvider> */}
-          <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
-          {/* </TRPCReactProvider> */}
+          <TRPCReactProvider>
+            <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+          </TRPCReactProvider>
         </SessionWrapper>
       </body>
     </html>

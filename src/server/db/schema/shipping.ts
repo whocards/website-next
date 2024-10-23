@@ -1,4 +1,3 @@
-import {relations} from 'drizzle-orm'
 import {integer, serial, text} from 'drizzle-orm/pg-core'
 
 import * as Util from '../utils'
@@ -23,10 +22,3 @@ export const shipping = Util.createTable('shipping', {
     .unique(),
   ...Util.createUpdateTimestamps,
 })
-
-export const shippingRelations = relations(shipping, ({one}) => ({
-  purchase: one(purchase, {
-    fields: [shipping.purchaseId],
-    references: [purchase.id],
-  }),
-}))

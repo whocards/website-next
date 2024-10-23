@@ -2,7 +2,7 @@ import {eq} from 'drizzle-orm'
 
 import {createTRPCRouter, protectedProcedure} from '~/server/api/trpc'
 import {user} from '~/server/db/schema'
-import {selectUserSchema} from '~/types/user'
+import {selectUserSchema} from '~/types'
 
 export const userRouter = createTRPCRouter({
   getById: protectedProcedure.input(selectUserSchema.pick({id: true})).query(async ({ctx, input}) => {
