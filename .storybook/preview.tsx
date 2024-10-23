@@ -6,6 +6,7 @@ import * as React from 'react'
 import '~/styles/globals.css'
 import {Toaster} from '../src/components/ui/toaster'
 import {nextIntl} from './next-intl'
+import {aptlyFont, golosFont} from '../src/assets/fonts'
 
 const preview: Preview = {
   parameters: {
@@ -13,6 +14,7 @@ const preview: Preview = {
     nextjs: {
       appDirectory: true,
     },
+    staticDirs: ['../public', {from: '../src/assets/fonts', to: '/fonts'}],
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -48,10 +50,10 @@ const preview: Preview = {
 
 export const decorators = [
   (Story) => (
-    <>
+    <span className={`${golosFont.variable}`} style={{fontFamily: 'Nunito Sans'}}>
       <Story />
       <Toaster />
-    </>
+    </span>
   ),
   withThemeByClassName({
     themes: {

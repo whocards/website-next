@@ -1,7 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import {fn} from '@storybook/test'
 
-import {Button} from '../components/ui/button'
+import {Button, type ButtonVariants} from '../components/ui/button'
 
 const meta = {
   title: 'ui/Button',
@@ -28,4 +28,21 @@ export const Primary: Story = {
     variant: 'default',
     size: 'default',
   },
+}
+
+const variants: ButtonVariants['variant'][] = ['default', 'outline', 'secondary', 'ghost', 'link', 'destructive']
+
+export const All: Story = {
+  args: {
+    children: 'Button',
+    size: 'default',
+    disabled: false,
+  },
+  render: (args) => (
+    <div className='grid grid-cols-3 gap-4'>
+      {variants.map((variant) => (
+        <Button {...args} key={variant} variant={variant} />
+      ))}
+    </div>
+  ),
 }
