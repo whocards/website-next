@@ -1,9 +1,9 @@
 import {sql} from 'drizzle-orm'
-import {boolean, pgTableCreator, type PgTimestampConfig, timestamp, varchar} from 'drizzle-orm/pg-core'
+import {pgTableCreator, type PgTimestampConfig, timestamp} from 'drizzle-orm/pg-core'
 
 export const createTable = pgTableCreator((name) => `whocards_${name}`)
 
-export const createUserTable = pgTableCreator((name) => `user_${name}`)
+export const createUserTable = pgTableCreator((name) => `account_${name}`)
 
 export const timestampSettings: PgTimestampConfig = {
   mode: 'date',

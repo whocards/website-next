@@ -8,5 +8,6 @@ export default {
   dbCredentials: {
     url: env.DATABASE_URL,
   },
-  tablesFilter: ['jhdb_*'],
+  tablesFilter: ['account_*', 'whocards_*'],
+  verbose: true,
 } satisfies Config
