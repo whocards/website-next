@@ -1,0 +1,175 @@
+{
+  "home": {"title": "home page", "admin": "Admin area"},
+  "buttons": {
+    "login": "LOG IN",
+    "newIncident": "Submit New Incident",
+    "profile": "My Profile",
+    "logout": "Sign Out",
+    "submit": "Submit",
+    "close": "Close",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "previous": "Previous",
+    "next": "Next",
+    "change": "Change",
+    "menu": "Open Menu",
+    "reject": "Reject",
+    "rejected": "Rejected",
+    "approve": "Approve",
+    "approved": "Approved",
+    "edit": "Edit",
+    "myAccount": "MY ACCOUNT"
+  },
+  "inputs": {
+    "email": "Email",
+    "password": "Password",
+    "newPassword": "New Password",
+    "search": "Search...",
+    "name": {
+      "first": "First Name",
+      "last": "Last Name"
+    },
+    "security": {
+      "question": "Security Question {number}",
+      "answer": "Security answer {number}",
+      "placeholder": "Select a new security question"
+    },
+    "placeholders": {
+      "email": "john.doe@example.com"
+    }
+  },
+  "login": {
+    "title": "Login",
+    "description": "Login below to submit a report",
+    "loading": "Logging in...",
+    "forgot": "Forgot Password?",
+    "error": "Login failed. Please check your email and password.",
+    "signUp": {
+      "description": "Don't have an account?",
+      "link": "Click here"
+    }
+  },
+  "register": {
+    "title": "Register",
+    "description": "Create your account below",
+    "success": "Registered successfully!",
+    "error": "Registration failed. Please check your email and password.",
+    "login": {
+      "description": "Already have an account?",
+      "link": "Click here"
+    }
+  },
+  "passwordReset": {
+    "title": "Password Reset"
+  },
+  "submitIncident": {
+    "title": "Add your incident report to the JHDB",
+    "description": "Incident description",
+    "type": "Incident type",
+    "threat": "Incident is threatening",
+    "impact": "Impact on victim",
+    "impactPlaceholder": "Describe the impact on the victim",
+    "additional": "Additional information",
+    "video": "Upload video(s)",
+    "videoDescription": "Description of video(s)",
+    "image": "Upload screenshot(s)",
+    "imageDescription": "Description of screenshot(s)",
+    "submit": "Submit Incident",
+    "success": "Incident submitted successfully!",
+    "back": "Go back to the home page",
+    "step": "Step {step}",
+    "steps": {
+      "1": "Incident",
+      "2": "Content",
+      "3": "Videos",
+      "4": "Screenshots",
+      "5": "Complete"
+    }
+  },
+  "profile": {
+    "details": "Profile details",
+    "settings": "Profile settings",
+    "history": "Report history",
+    "account": "My account",
+    "accountDetails": "Account details",
+    "subscribe": "Subscribe for email notifications",
+    "tabs": {
+      "account": "Account",
+      "security": "Security"
+    },
+    "delete": {
+      "title": "Delete Account",
+      "subtitle": "Permanently delete your account and all of your content.",
+      "description": "We're sorry to see you go. Once your account is deleted, all of your content will be permanently gone, including your profile, incident reports and media. If you're not sure about that, we suggest you submit a request at help.com instead.",
+      "success": "Account successfully deleted",
+      "error": "There was an issue deleting your account. Please try again."
+    },
+    "securityStuff": "Security stuff goes here",
+    "edit": {
+      "success": "Profile updated",
+      "error": "Edit profile failed. Please try again."
+    }
+  },
+  "incidents": {
+    "title": "INCIDENT REPORTS",
+    "notFound": "No incidents found."
+  },
+  "table": {
+    "selected": "{count} of {total} row(s) selected",
+    "perPage": "Rows per page",
+    "columns": "Columns",
+    "ascending": "Asc",
+    "descending": "Desc",
+    "hide": "Hide"
+  },
+  "incident": {
+    "title": "INCIDENT",
+    "notFound": "No incident found.",
+    "description": "Description",
+    "impact": "Impact on victim",
+    "additional": "Additional Information",
+    "location": "Location",
+    "view": "View details",
+    "delete": {
+      "title": "Delete Incident",
+      "description": "By deleting the incident you will lose all data related to this incident. This action cannot be undone."
+    },
+    "edit": {
+      "title": "EDIT INCIDENT",
+      "notImplemented": "EDIT FORM HERE"
+    }
+  },
+  "reports": {
+    "view": "View report",
+    "edit": "Edit report",
+    "delete": {
+      "title": "Delete Report",
+      "description": "By deleting the report you will lose all data related to this report. This action cannot be undone."
+    }
+  },
+  "404": {
+    "title": "Uh-oh!",
+    "description": "We can't find that page.",
+    "link": "Go back to site"
+  },
+  "dropzone": {
+    "upload": "Upload or drag and drop {type} here",
+    "drop": "Drop {type} here...",
+    "image": "image(s)",
+    "video": "video(s)"
+  },
+  "common": {
+    "update": "Update",
+    "updating": "Updating...",
+    "error": "Error",
+    "success": "Success!",
+    "threat": "Threat",
+    "notThreat": "Not threat",
+    "errorMessage": "An unexpected error occurred. Please try again later.",
+    "deleting": "Deleting..."
+  },
+  "footer": "© {year} - JHDB",
+  "chart": {
+    "pie": "Incidents"
+  }
+}

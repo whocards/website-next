@@ -1,0 +1,13 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "schedule:weekly"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["eslint", "@types/eslint"],
+      "matchUpdateTypes": ["minor", "patch"]
+    }
+  ],
+  "npm": {
+    "minimumReleaseAge": "3 days"
+  }
+}
