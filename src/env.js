@@ -22,7 +22,10 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
     IS_DEV: z.boolean(),
-    DEFAULT_USER_ROLE: z.string(),
+    ADMIN_EMAILS: z
+      .string()
+      .transform((email) => email.split(',').map((email) => email.trim()))
+      .optional(),
     SENTRY_AUTH_TOKEN: z.string().optional(),
     SENTRY_PROJECT: z.string().optional(),
     SENTRY_ORG: z.string().optional(),
@@ -51,11 +54,11 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     IS_DEV: process.env.NODE_ENV === 'development',
-    DEFAULT_USER_ROLE: process.env.DEFAULT_USER_ROLE || 'unknown',
     SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
     SENTRY_PROJECT: process.env.SENTRY_PROJECT,
     SENTRY_ORG: process.env.SENTRY_ORG,
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    ADMIN_EMAILS: process.env.ADMIN_EMAILS,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

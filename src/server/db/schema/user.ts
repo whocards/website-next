@@ -13,6 +13,8 @@ export const user = Util.createUserTable('user', {
   email: text('email').notNull().unique(),
   image: text('image'),
   newsletter: boolean('newsletter').default(false).notNull(),
+  isSuperUser: boolean('is_superuser').default(false).notNull(),
+  emailVerified: timestamp('email_verified', Util.timestampSettings),
   lastLogin: timestamp('last_login', Util.timestampSettings),
   ...Util.createUpdateTimestamps,
 })

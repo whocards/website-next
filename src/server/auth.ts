@@ -7,7 +7,7 @@ import GoogleProvider, {type GoogleProfile} from 'next-auth/providers/google'
 
 import {env} from '~/env'
 import {db} from '~/server/db'
-import {accounts, sessions, type UserRole, user as usersTable, verificationTokens} from '~/server/db/schema'
+import {accounts, sessions, user as usersTable, verificationTokens} from '~/server/db/schema'
 
 // TODO verify and fix initial login for non verified users?
 
@@ -21,16 +21,18 @@ declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: {
       id: string
-      role: UserRole
+      isSuperUser: boolean
       // ...other properties
     } & DefaultSession['user']
   }
 
   interface User {
     // ...other properties
-    role?: UserRole[]
+    isSuperUser?: boolean
   }
 }
+
+const isSuperUser = (email?: string | null) => !!email && (env.ADMIN_EMAILS?.includes(email) ?? false)
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -40,8 +42,6 @@ declare module 'next-auth' {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     signIn: async ({user}) => {
-      if (!canLogin) return false
-
       await db.update(usersTable).set({lastLogin: new Date()}).where(eq(usersTable.id, user.id))
 
       return true
@@ -69,7 +69,7 @@ export const authOptions: NextAuthOptions = {
         name: profile.name ?? profile.login,
         email: profile.email,
         image: profile.avatar_url,
-        role: [env.DEFAULT_USER_ROLE] as UserRole[],
+        isSuperUser: isSuperUser(profile.email),
       }),
     }),
     GoogleProvider({
@@ -81,7 +81,7 @@ export const authOptions: NextAuthOptions = {
           name: profile.name,
           email: profile.email,
           image: profile.picture,
-          role: [env.DEFAULT_USER_ROLE] as UserRole[],
+          isSuperUser: isSuperUser(profile.email),
         }
       },
     }),

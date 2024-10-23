@@ -8,6 +8,6 @@ export default {
   dbCredentials: {
     url: env.DATABASE_URL,
   },
-  tablesFilter: ['account_*', 'whocards_*'],
+  tablesFilter: [],
   verbose: true,
 } satisfies Config
