@@ -6,9 +6,9 @@ import 'dotenv/config'
 import {env} from '~/env'
 
 import * as schema from './schema'
-import * as seeds from './seeds'
+// import * as seeds from './seeds'
 
-const recordCounts = {}
+// const recordCounts = {}
 
 const conn = postgres(env.DATABASE_URL, {max: 1})
 

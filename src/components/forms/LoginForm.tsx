@@ -8,10 +8,10 @@ import {useState} from 'react'
 import {useForm} from 'react-hook-form'
 
 import GoogleIcon from '~/assets/google.svg'
+import {LoginSchema, type LoginSchemaType} from '~/types/validations'
 import {Button} from '~/ui/button'
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '~/ui/card'
 import {Form} from '~/ui/form'
-import {LoginSchema, type LoginSchemaType} from '~/validations'
 
 import {FormInput} from './inputs/FormInput'
 

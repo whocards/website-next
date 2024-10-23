@@ -13,6 +13,8 @@ export const user = Util.createUserTable('user', {
   email: text('email').notNull().unique(),
   image: text('image'),
   newsletter: boolean('newsletter').default(false).notNull(),
+  lastLogin: timestamp('last_login', Util.timestampSettings),
+  ...Util.createUpdateTimestamps,
 })
 
 export const userAccountRelations = relations(user, ({many}) => ({
@@ -62,7 +64,7 @@ export const sessionsRelations = relations(sessions, ({one}) => ({
   user: one(user, {fields: [sessions.userId], references: [user.id]}),
 }))
 
-export const verificationTokens = Util.createTable(
+export const verificationTokens = Util.createUserTable(
   'verificationToken',
   {
     identifier: varchar('identifier', {length: 255}).notNull(),
