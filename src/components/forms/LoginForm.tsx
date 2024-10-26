@@ -7,7 +7,7 @@ import {useTranslations} from 'next-intl'
 import {useState} from 'react'
 import {useForm} from 'react-hook-form'
 
-import GoogleIcon from '~/assets/google.svg'
+import GoogleIcon from '~/assets/images/google.svg'
 import {LoginSchema, type LoginSchemaType} from '~/types/validations'
 import {Button} from '~/ui/button'
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '~/ui/card'
