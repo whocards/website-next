@@ -1,4 +1,4 @@
-import type {StorybookConfig} from '@storybook/nextjs'
+import type {StorybookConfig} from '@storybook/experimental-nextjs-vite'
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
@@ -9,22 +9,6 @@ const config: StorybookConfig = {
     '@storybook/addon-themes',
     'storybook-next-intl',
   ],
-  framework: {
-    name: '@storybook/nextjs',
-    options: {},
-  },
-  staticDirs: ['../public'],
-  typescript: {
-    reactDocgen: 'react-docgen-typescript',
-  },
-  webpackFinal: async (config) => {
-    config.externals = config.externals || {}
-    Object.assign(config.externals, {
-      'node:path': 'path',
-      'node:module': 'module',
-    })
-
-    return config
-  },
+  framework: '@storybook/experimental-nextjs-vite',
 }
 export default config
