@@ -19,17 +19,21 @@ jobs:
       name: github-pages
       url: ${{ steps.build-publish.outputs.page_url }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20]
     steps:
+      - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
           run_install: false
       - uses: actions/setup-node@v4
         with:
+          node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
       - id: build-publish
         uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
         with:
-          install_command: pnpm ci # default: npm ci
-          build_command: pnpm build:docs # default: npm run build-storybook
+          install_command: pnpm i --frozen-lockfile
+          build_command: pnpm build:docs
           path: storybook-static
