@@ -4,8 +4,7 @@
   "private": false,
   "type": "module",
   "scripts": {
-    "build": "pnpm run /build:/",
-    "build:app": "next build",
+    "build": "next build",
     "build:docs": "storybook build --quiet",
     "prebuild": "rm -fr ./public/storybook",
     "postbuild": "cp -r ./storybook-static ./public/storybook",
