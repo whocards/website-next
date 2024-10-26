@@ -6,8 +6,6 @@
   "scripts": {
     "build": "next build",
     "build:docs": "storybook build --quiet",
-    "prebuild": "rm -fr ./public/storybook",
-    "postbuild": "cp -r ./storybook-static ./public/storybook",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
