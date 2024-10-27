@@ -43,8 +43,6 @@ const meta: Meta<{
           const resolved = style.getPropertyValue(variable)
           const resolvedValue = resolved ? value.replace(/var\(--(.*?)\)/, resolved) : value
 
-          console.log(args)
-
           return (
             <tr key={name} className='border-b bg-card'>
               <td className='px-6 py-4'>{name}</td>

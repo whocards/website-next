@@ -1,19 +1,19 @@
 import type {Config} from 'tailwindcss/types/config'
 import tailwindcssAnimate from 'tailwindcss-animate'
-// import {withUt} from 'uploadthing/tw'
+import {withUt} from 'uploadthing/tw'
 
 const config: Config = {
   darkMode: ['class'],
   content: ['./src/**/*.tsx', './storybook/*.tsx'],
   theme: {
+    fontFamily: {
+      sans: ['var(--font-golos)'],
+      title: ['var(--font-aptly)'],
+      chinese: ['var(noto-sans-chinese)'],
+      hebrew: ['var(noto-sans-hebrew)'],
+      japanese: ['var(noto-sans-japanese)'],
+    },
     extend: {
-      fontFamily: {
-        sans: ['var(--font-golos)'],
-        title: ['var(--font-aptly)'],
-        chinese: ['var(noto-sans-chinese)'],
-        hebrew: ['var(noto-sans-hebrew)'],
-        japanese: ['var(noto-sans-japanese)'],
-      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
@@ -102,4 +102,4 @@ const config: Config = {
   plugins: [tailwindcssAnimate],
 }
 
-export default config
+export default withUt(config)
