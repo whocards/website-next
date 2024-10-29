@@ -1,9 +1,11 @@
+import {Golos_Text} from 'next/font/google'
 import localFont from 'next/font/local'
 
-export const golosFont = localFont({
+export const golosFont = Golos_Text({
   variable: '--font-golos',
   display: 'swap',
-  src: './golos_text.woff2',
+  subsets: ['latin'],
+  weight: 'variable',
 })
 
 export const aptlyFont = localFont({
