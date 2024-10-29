@@ -149,6 +149,9 @@ importers:
       tailwind-merge:
         specifier: ^2.5.4
         version: 2.5.4
+      tailwind-scrollbar-hide:
+        specifier: ^1.1.7
+        version: 1.1.7
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.14)
@@ -270,12 +273,18 @@ importers:
       tailwindcss:
         specifier: ^3.4.14
         version: 3.4.14
+      tailwindcss-breakpoints-inspector:
+        specifier: ^1.1.0
+        version: 1.1.0(tailwindcss@3.4.14)
       tsx:
         specifier: ^4.19.1
         version: 4.19.1
       typescript:
         specifier: ^5.6.3
         version: 5.6.3
+      vite-plugin-commonjs:
+        specifier: ^0.10.3
+        version: 0.10.3
 
 packages:
 
@@ -6659,10 +6668,18 @@ packages:
   tailwind-merge@2.5.4:
     resolution: {integrity: sha512-0q8cfZHMu9nuYP/b5Shb7Y7Sh1B7Nnl5GqNr1U+n2p6+mybvRtayrQ+0042Z5byvTA8ihjlP8Odo8/VnHbZu4Q==}
 
+  tailwind-scrollbar-hide@1.1.7:
+    resolution: {integrity: sha512-X324n9OtpTmOMqEgDUEA/RgLrNfBF/jwJdctaPZDzB3mppxJk7TLIDmOreEDm1Bq4R9LSPu4Epf8VSdovNU+iA==}
+
   tailwindcss-animate@1.0.7:
     resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders'
+
+  tailwindcss-breakpoints-inspector@1.1.0:
+    resolution: {integrity: sha512-jNcuh21Mvi3XUwrWoPuo3oWW0Jdg/jzYsHt723NzK/VMy/q221WryrlaR8o7f+XJ9XX1FEzrvuNIN18wL5lcew==}
+    peerDependencies:
+      tailwindcss: ^1.0 || ^2.0 || ^3.0
 
   tailwindcss@3.4.14:
     resolution: {integrity: sha512-IcSvOcTRcUtQQ7ILQL5quRDg7Xs93PdJEk1ZLbhhvJc7uj/OAhYOnruEiwnGgBvUtaUAJ8/mhSw1o8L2jCiENA==}
@@ -6974,6 +6991,12 @@ packages:
 
   victory-vendor@36.9.2:
     resolution: {integrity: sha512-PnpQQMuxlwYdocC8fIJqVXvkeViHYzotI+NJrCuav0ZYFoq912ZHBk3mCeuj+5/VpodOjPe1z0Fk2ihgzlXqjQ==}
+
+  vite-plugin-commonjs@0.10.3:
+    resolution: {integrity: sha512-trtH4dfAqrbqwiUhSKcqrfjnlXnqLHdIbYuUy943y34JnDjIX8qlpExP0nFN+kE2s6/BS6r9d1cAHS0KtiF4yQ==}
+
+  vite-plugin-dynamic-import@1.6.0:
+    resolution: {integrity: sha512-TM0sz70wfzTIo9YCxVFwS8OA9lNREsh+0vMHGSkWDTZ7bgd1Yjs5RV8EgB634l/91IsXJReg0xtmuQqP0mf+rg==}
 
   vite-plugin-storybook-nextjs@1.0.11:
     resolution: {integrity: sha512-iyKiakLufUUDjUYSNtt5CusL24Y78+1A0dTH4ElvN0MwYiDSGOBpDAD5B921v/wb5FMVSHTI2Fc+jNnL9pupOw==}
@@ -14143,7 +14166,13 @@ snapshots:
 
   tailwind-merge@2.5.4: {}
 
+  tailwind-scrollbar-hide@1.1.7: {}
+
   tailwindcss-animate@1.0.7(tailwindcss@3.4.14):
+    dependencies:
+      tailwindcss: 3.4.14
+
+  tailwindcss-breakpoints-inspector@1.1.0(tailwindcss@3.4.14):
     dependencies:
       tailwindcss: 3.4.14
 
@@ -14472,6 +14501,19 @@ snapshots:
       d3-shape: 3.2.0
       d3-time: 3.1.0
       d3-timer: 3.0.1
+
+  vite-plugin-commonjs@0.10.3:
+    dependencies:
+      acorn: 8.13.0
+      magic-string: 0.30.12
+      vite-plugin-dynamic-import: 1.6.0
+
+  vite-plugin-dynamic-import@1.6.0:
+    dependencies:
+      acorn: 8.13.0
+      es-module-lexer: 1.5.4
+      fast-glob: 3.3.2
+      magic-string: 0.30.12
 
   vite-plugin-storybook-nextjs@1.0.11(@storybook/test@8.3.6(storybook@8.3.6))(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(storybook@8.3.6)(vite@5.4.10(@types/node@20.16.13)(terser@5.36.0)):
     dependencies:

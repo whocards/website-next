@@ -1,17 +1,19 @@
+import {fontFamily} from 'tailwindcss/defaultTheme'
 import type {Config} from 'tailwindcss/types/config'
 import tailwindcssAnimate from 'tailwindcss-animate'
-import {withUt} from 'uploadthing/tw'
+
+// import {withUt} from 'uploadthing/tw'
 
 const config: Config = {
   darkMode: ['class'],
   content: ['./src/**/*.tsx', './storybook/*.tsx'],
   theme: {
     fontFamily: {
-      sans: ['var(--font-golos)'],
-      title: ['var(--font-aptly)'],
-      chinese: ['var(noto-sans-chinese)'],
-      hebrew: ['var(noto-sans-hebrew)'],
-      japanese: ['var(noto-sans-japanese)'],
+      sans: ['var(--font-golos)', ...fontFamily.sans],
+      title: ['var(--font-aptly)', ...fontFamily.sans],
+      chinese: ['var(noto-sans-chinese)', ...fontFamily.sans],
+      hebrew: ['var(noto-sans-hebrew)', ...fontFamily.sans],
+      japanese: ['var(noto-sans-japanese)', ...fontFamily.sans],
     },
     extend: {
       borderRadius: {
@@ -20,7 +22,7 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       colors: {
-        pink: '#C058D2',
+        'primary-dark': '#C058D2',
         yellow: {
           300: '#FFE37E',
           DEFAULT: '#F9D75F',
@@ -34,7 +36,7 @@ const config: Config = {
           400: '#474A69',
         },
         dark: {
-          400: '#262432',
+          DEFAULT: '#262432',
           500: '#111516',
           600: '#08001A',
         },
@@ -99,7 +101,9 @@ const config: Config = {
       },
     },
   },
-  plugins: [tailwindcssAnimate],
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  plugins: [tailwindcssAnimate, require('tailwind-scrollbar-hide'), require('tailwindcss-breakpoints-inspector')],
 }
 
-export default withUt(config)
+export default config
+// export default withUt(config)
