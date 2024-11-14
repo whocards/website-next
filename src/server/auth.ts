@@ -21,18 +21,15 @@ declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: {
       id: string
-      isSuperUser: boolean
       // ...other properties
     } & DefaultSession['user']
   }
 
   interface User {
     // ...other properties
-    isSuperUser?: boolean
+    id: string
   }
 }
-
-const isSuperUser = (email?: string | null) => !!email && (env.ADMIN_EMAILS?.includes(email) ?? false)
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -69,7 +66,6 @@ export const authOptions: NextAuthOptions = {
         name: profile.name ?? profile.login,
         email: profile.email,
         image: profile.avatar_url,
-        isSuperUser: isSuperUser(profile.email),
       }),
     }),
     GoogleProvider({
@@ -81,7 +77,6 @@ export const authOptions: NextAuthOptions = {
           name: profile.name,
           email: profile.email,
           image: profile.picture,
-          isSuperUser: isSuperUser(profile.email),
         }
       },
     }),
