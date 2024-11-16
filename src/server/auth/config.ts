@@ -3,7 +3,7 @@ import {type DefaultSession, type NextAuthConfig} from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 
 import {db} from '~/server/db'
-import {accounts, sessions, users, verificationTokens} from '~/server/db/schema'
+import {authAccounts, authSessions, authUsers, authVerificationTokens} from '~/server/db/schema'
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -34,10 +34,10 @@ declare module 'next-auth' {
 export const authConfig = {
   providers: [GithubProvider],
   adapter: DrizzleAdapter(db, {
-    usersTable: users,
-    accountsTable: accounts,
-    sessionsTable: sessions,
-    verificationTokensTable: verificationTokens,
+    usersTable: authUsers,
+    accountsTable: authAccounts,
+    sessionsTable: authSessions,
+    verificationTokensTable: authVerificationTokens,
   }),
   callbacks: {
     session: ({session, user}) => ({
