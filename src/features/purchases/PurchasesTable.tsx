@@ -1,12 +1,12 @@
 'use client'
 
-import {api} from '~/trpc/react'
+import type {RouterOutputs} from '~/trpc/react'
 
-export const PurchasesTable = () => {
-  const [purchases] = api.purchases.getAll.useSuspenseQuery()
+type Props = {
+  purchases: RouterOutputs['purchases']['getAll']
+}
 
-  // const utils = api.useUtils()
-
+export const PurchasesTable = ({purchases}: Props) => {
   return (
     <div className='w-full max-w-xs'>
       {purchases.map((purchase) => (

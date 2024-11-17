@@ -3,14 +3,14 @@
 import * as React from 'react'
 import {Slot} from '@radix-ui/react-slot'
 import {type VariantProps, cva} from 'class-variance-authority'
-import {PanelLeft} from 'lucide-react'
+import {PanelLeftClose, PanelLeftOpen} from 'lucide-react'
 
 import {useIsMobile} from '~/hooks/use-mobile'
 import {cn} from '~/lib/utils'
 import {Button} from '~/components/ui/button'
 import {Input} from '~/components/ui/input'
 import {Separator} from '~/components/ui/separator'
-import {Sheet, SheetContent} from '~/components/ui/sheet'
+import {Sheet, SheetContent, SheetDescription, SheetTitle} from '~/components/ui/sheet'
 import {Skeleton} from '~/components/ui/skeleton'
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from '~/components/ui/tooltip'
 
@@ -155,6 +155,8 @@ const Sidebar = React.forwardRef<
   if (isMobile) {
     return (
       <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
+        <SheetTitle className='hidden' />
+        <SheetDescription className='hidden' />
         <SheetContent
           data-sidebar='sidebar'
           data-mobile='true'
@@ -220,7 +222,7 @@ Sidebar.displayName = 'Sidebar'
 
 const SidebarTrigger = React.forwardRef<React.ElementRef<typeof Button>, React.ComponentProps<typeof Button>>(
   ({className, onClick, ...props}, ref) => {
-    const {toggleSidebar} = useSidebar()
+    const {toggleSidebar, open, isMobile, openMobile} = useSidebar()
 
     return (
       <Button
@@ -235,7 +237,7 @@ const SidebarTrigger = React.forwardRef<React.ElementRef<typeof Button>, React.C
         }}
         {...props}
       >
-        <PanelLeft />
+        {(isMobile ? openMobile : open) ? <PanelLeftClose /> : <PanelLeftOpen />}
         <span className='sr-only'>Toggle Sidebar</span>
       </Button>
     )
