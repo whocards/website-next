@@ -1,17 +1,14 @@
 'use client'
 
-import type {RouterOutputs} from '~/trpc/react'
+import {DataTable} from '~/components/table/data-table'
+import type {PurchaseWithUserAndShipping} from '~/types/purchases'
+import {purchaseColumns} from './columns'
 
 type Props = {
-  purchases: RouterOutputs['purchases']['getAll']
+  purchases: PurchaseWithUserAndShipping[]
 }
 
 export const PurchasesTable = ({purchases}: Props) => {
-  return (
-    <div className='w-full max-w-xs'>
-      {purchases.map((purchase) => (
-        <div key={purchase.id}>{purchase.user.name}</div>
-      ))}
-    </div>
-  )
+  console.log(purchases)
+  return <DataTable data={purchases} columns={purchaseColumns} />
 }
