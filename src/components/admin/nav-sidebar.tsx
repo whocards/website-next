@@ -23,7 +23,6 @@ import Logo from '~/assets/icons/logo.svg'
 import LogoIcon from '~/assets/icons/logo-icon.svg'
 import {NavUser} from './nav-user'
 import {ChartNoAxesCombined, ShoppingCart, Truck} from 'lucide-react'
-import {Button} from '../ui/button'
 
 const data = {
   navMain: [
@@ -44,8 +43,6 @@ const data = {
 export function AdminSidebar({...props}: ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
   const {open, isMobile} = useSidebar()
-
-  console.log({isMobile, open})
 
   return (
     <>
