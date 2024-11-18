@@ -9,6 +9,5 @@ type Props = {
 }
 
 export const PurchasesTable = ({purchases}: Props) => {
-  console.log(purchases)
   return <DataTable data={purchases} columns={purchaseColumns} />
 }
