@@ -8,6 +8,7 @@ import {Checkbox} from '~/components/ui/checkbox'
 import {DataTableColumnHeader} from '~/components/table/data-table-column-header'
 import {DataTableRowActions} from '~/components/table/data-table-row-actions'
 import type {PurchaseWithUserAndShipping} from '~/types/purchases'
+import {Separator} from '~/components/ui/separator'
 
 export const purchaseColumns: ColumnDef<PurchaseWithUserAndShipping>[] = [
   {
@@ -39,19 +40,69 @@ export const purchaseColumns: ColumnDef<PurchaseWithUserAndShipping>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'category',
-    header: ({column}) => <DataTableColumnHeader column={column} title='Category' />,
+    accessorKey: 'user.name',
+    header: ({column}) => <DataTableColumnHeader column={column} title='Name' />,
+    size: Number.MAX_SAFE_INTEGER,
     cell: ({row}) => {
-      return <Badge variant='secondary'>{row.getValue('category')}</Badge>
+      return (
+        <div className='flex w-full items-center gap-2'>
+          <div className='text-sm text-muted-foreground'>{row.original.user.name}</div>
+          {row.original.shipping.company && <Badge variant='secondary'>{row.original.shipping.company}</Badge>}
+        </div>
+      )
     },
   },
   {
-    accessorKey: 'shipping',
+    accessorKey: 'shipping.quantity',
     header: ({column}) => <DataTableColumnHeader column={column} title='Quantity' />,
     cell: ({row}) => {
-      return <div>{row.original.shipping.quantity}</div>
+      return (
+        <div className='flex items-center gap-2'>
+          <div>{row.original.shipping.quantity}</div>
+          {/* <Separator orientation='vertical' className='h-4' />
+          <div>{row.original.category}</div> */}
+        </div>
+      )
     },
   },
+  {
+    accessorKey: 'shipping.country',
+    header: ({column}) => <DataTableColumnHeader column={column} title='Country' />,
+    cell: ({row}) => <div>{row.original.shipping.country}</div>,
+  },
+  {
+    accessorKey: 'shipping.city',
+    header: ({column}) => <DataTableColumnHeader column={column} title='City' />,
+    cell: ({row}) => <div>{row.original.shipping.city}</div>,
+  },
+  {
+    accessorKey: 'price',
+    header: ({column}) => <DataTableColumnHeader column={column} title='Price' />,
+    cell: ({row}) => {
+      const price = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'EUR',
+      })
+      return <div>{price.format(row.original.price / 100)}</div>
+    },
+  },
+  {
+    accessorKey: 'netPrice',
+    header: ({column}) => <DataTableColumnHeader className='max-w-min' column={column} title='Net Price' />,
+    cell: ({row}) => {
+      const price = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'EUR',
+      })
+      return <div className='max-w-min'>{price.format(row.original.netPrice / 100)}</div>
+    },
+  },
+  {
+    accessorKey: 'date',
+    header: ({column}) => <DataTableColumnHeader column={column} title='Date' />,
+    cell: ({row}) => <div>{row.original.date.toLocaleDateString()}</div>,
+  },
+
   //   filterFn: (row, id, value) => {
   //     return value.includes(row.getValue(id))
   //   },
