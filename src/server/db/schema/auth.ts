@@ -8,7 +8,7 @@ export type UserRole = (typeof UserRoles)[number]
 export const userRoleEnum = pgEnum('user_role', UserRoles)
 export const defaultUserRole: UserRole[] = ['user']
 
-export const authUsers = Utils.createUserTable('user', {
+export const authUsers = Utils.createAuthTable('user', {
   id: Utils.userId('id')
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -23,7 +23,7 @@ export const authUsersRelations = relations(authUsers, ({many}) => ({
   accounts: many(authAccounts),
 }))
 
-export const authAccounts = Utils.createUserTable(
+export const authAccounts = Utils.createAuthTable(
   'account',
   {
     userId: Utils.userId().references(() => authUsers.id),
@@ -52,7 +52,7 @@ export const authAccountsRelations = relations(authAccounts, ({one}) => ({
   user: one(authUsers, {fields: [authAccounts.userId], references: [authUsers.id]}),
 }))
 
-export const authSessions = Utils.createUserTable(
+export const authSessions = Utils.createAuthTable(
   'session',
   {
     sessionToken: varchar('session_token', {length: 255}).notNull().primaryKey(),
@@ -68,7 +68,7 @@ export const authSessionsRelations = relations(authSessions, ({one}) => ({
   user: one(authUsers, {fields: [authSessions.userId], references: [authUsers.id]}),
 }))
 
-export const authVerificationTokens = Utils.createUserTable(
+export const authVerificationTokens = Utils.createAuthTable(
   'verification_token',
   {
     identifier: varchar('identifier', {length: 255}).notNull(),
