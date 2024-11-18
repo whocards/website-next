@@ -1,6 +1,6 @@
 import {cookies} from 'next/headers'
 import {redirect} from 'next/navigation'
-import {AdminSidebar} from '~/components/admin/nav-sidebar'
+import {AppSidebar} from '~/components/nav-sidebar'
 import {SIDEBAR_COOKIE_NAME, SidebarInset} from '~/components/ui/sidebar'
 import {SidebarProvider} from '~/components/ui/sidebar'
 import {auth} from '~/server/auth'
@@ -15,9 +15,13 @@ export default async function AdminLayout({children}: {children: React.ReactNode
     redirect('/api/auth/signin')
   }
 
+  if (!session.user.roles.includes('admin') && !session.user.roles.includes('owner')) {
+    redirect('/')
+  }
+
   return (
     <SidebarProvider defaultOpen={defaultSidebarOpen}>
-      <AdminSidebar />
+      <AppSidebar />
       <SidebarInset>
         {/* <header className='flex h-16 shrink-0 items-center gap-2 border-b'> */}
         {/* Maybe add breadcrumbs or title here */}

@@ -7,6 +7,9 @@ import {HydrateClient} from '~/trpc/server'
 export default async function Home() {
   const session = await auth()
 
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  const canAccessAdmin = session?.user?.roles.includes('admin') || session?.user?.roles.includes('owner')
+
   return (
     <HydrateClient>
       <main className='flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white'>
@@ -18,7 +21,7 @@ export default async function Home() {
           >
             {session ? 'Sign out' : 'Sign in'}
           </Link>
-          {session?.user && (
+          {canAccessAdmin && (
             <Button asChild>
               <Link href='/admin'>Admin page</Link>
             </Button>

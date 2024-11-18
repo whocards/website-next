@@ -1,7 +1,12 @@
 import {relations} from 'drizzle-orm'
-import {index, integer, primaryKey, text, timestamp, varchar} from 'drizzle-orm/pg-core'
+import {index, integer, pgEnum, primaryKey, text, timestamp, varchar} from 'drizzle-orm/pg-core'
 import {type AdapterAccount} from 'next-auth/adapters'
 import * as Utils from '../utils'
+
+export const UserRoles = ['admin', 'owner', 'user'] as const
+export type UserRole = (typeof UserRoles)[number]
+export const userRoleEnum = pgEnum('user_role', UserRoles)
+export const defaultUserRole: UserRole[] = ['user']
 
 export const authUsers = Utils.createUserTable('user', {
   id: Utils.userId('id')
@@ -11,6 +16,7 @@ export const authUsers = Utils.createUserTable('user', {
   email: varchar('email', {length: 255}).notNull(),
   emailVerified: timestamp('email_verified', Utils.timestampSettings).default(Utils.currentTimestamp),
   image: varchar('image', {length: 255}),
+  roles: userRoleEnum('roles').array().$type<UserRole[]>().default(defaultUserRole),
 })
 
 export const authUsersRelations = relations(authUsers, ({many}) => ({

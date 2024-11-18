@@ -1,9 +1,16 @@
 import {DrizzleAdapter} from '@auth/drizzle-adapter'
 import {type DefaultSession, type NextAuthConfig} from 'next-auth'
-import GithubProvider from 'next-auth/providers/github'
+import GithubProvider, {GitHubProfile} from 'next-auth/providers/github'
 
 import {db} from '~/server/db'
-import {authAccounts, authSessions, authUsers, authVerificationTokens} from '~/server/db/schema'
+import {
+  authAccounts,
+  authSessions,
+  authUsers,
+  authVerificationTokens,
+  defaultUserRole,
+  type UserRole,
+} from '~/server/db/schema'
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -16,14 +23,15 @@ declare module 'next-auth' {
     user: {
       id: string
       // ...other properties
-      // role: UserRole;
+      roles: UserRole[]
     } & DefaultSession['user']
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    roles: UserRole[]
+  }
+
+  type AdapterUser = User
 }
 
 /**
@@ -45,6 +53,7 @@ export const authConfig = {
       user: {
         ...session.user,
         id: user.id,
+        roles: user.roles,
       },
     }),
   },
