@@ -6,7 +6,6 @@ import * as Utils from '../utils'
 export const users = Utils.createTable('user', {
   id: serial('id').primaryKey(),
   email: text('email').notNull().unique(),
-  ocSlug: text('oc_slug'),
   name: text('name').notNull(),
   newsletter: boolean('newsletter').default(false).notNull(),
 })

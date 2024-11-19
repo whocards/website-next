@@ -7,9 +7,9 @@ import {auth} from '~/server/auth'
 
 export default async function AdminLayout({children}: {children: React.ReactNode}) {
   const session = await auth()
-  const cookie = await cookies()
+  const cookie = (await cookies()).get(SIDEBAR_COOKIE_NAME)
 
-  const defaultSidebarOpen = cookie.get(SIDEBAR_COOKIE_NAME)?.value === 'true'
+  const defaultSidebarOpen = !!cookie?.value && cookie?.value === 'true'
 
   if (!session?.user) {
     redirect('/api/auth/signin')
