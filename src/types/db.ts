@@ -1,9 +1,11 @@
 import {createSelectSchema} from 'drizzle-zod'
-import type {z} from 'zod'
+import {z} from 'zod'
 
-import {authUsers, purchases, shippings, users} from '~/server/db/schema'
+import {authUsers, purchases, shippings, UserRoles, users} from '~/server/db/schema'
 
-export const authUserSchema = createSelectSchema(authUsers)
+export const authUserSchema = createSelectSchema(authUsers, {
+  roles: z.array(z.enum(UserRoles)),
+})
 export type AuthUser = z.infer<typeof authUserSchema>
 
 export const userSchema = createSelectSchema(users)

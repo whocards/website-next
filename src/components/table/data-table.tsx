@@ -81,6 +81,12 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                     <TableCell
                       key={cell.id}
                       className={cn(cell.column.columnDef.size === Number.MAX_SAFE_INTEGER && 'w-full')}
+                      style={{
+                        width:
+                          cell.column.columnDef.size !== Number.MAX_SAFE_INTEGER
+                            ? cell.column.columnDef.size
+                            : undefined,
+                      }}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>

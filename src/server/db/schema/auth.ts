@@ -16,7 +16,7 @@ export const authUsers = Utils.createAuthTable('user', {
   email: varchar('email', {length: 255}).notNull(),
   emailVerified: timestamp('email_verified', Utils.timestampSettings).default(Utils.currentTimestamp),
   image: varchar('image', {length: 255}),
-  roles: userRoleEnum('roles').array().$type<UserRole[]>().default(defaultUserRole),
+  roles: userRoleEnum('roles').array().default(defaultUserRole).notNull(),
 })
 
 export const authUsersRelations = relations(authUsers, ({many}) => ({

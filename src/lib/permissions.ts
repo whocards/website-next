@@ -1,3 +1,4 @@
+// copied with love from https://github.com/WebDevSimplified/permission-system/blob/main/auth-abac.ts
 import type {User} from 'next-auth'
 import type {UserRole} from '~/server/db/schema'
 import type {AuthUser, Shipping} from '~/types/db'
@@ -69,7 +70,6 @@ export const ROLES: RolesWithPermissions = {
       view: true,
     },
     users: {
-      edit: true,
       view: true,
     },
     userRoles: {
@@ -90,8 +90,8 @@ export const ROLES: RolesWithPermissions = {
   },
   user: {
     users: {
-      edit: (user, data) => user.email === data.email,
-      view: (user, data) => user.email === data.email,
+      edit: (user, data) => user.email === data.email, // TODO: add api and ui check
+      view: (user, data) => user.email === data.email, // TODO: add api and ui check
     },
     userRoles: {
       edit: false,

@@ -22,7 +22,7 @@ import Link from 'next/link'
 import Logo from '~/assets/icons/logo.svg'
 import LogoIcon from '~/assets/icons/logo-icon.svg'
 import {NavUser} from './nav-user'
-import {ChartNoAxesCombined, ShoppingCart, Truck} from 'lucide-react'
+import {ChartNoAxesCombined, ShoppingCart, Truck, Users} from 'lucide-react'
 
 const navAdmin = {
   navMain: [
@@ -36,6 +36,11 @@ const navAdmin = {
       title: 'Shipments',
       url: '/wc/shipments',
       icon: Truck,
+    },
+    {
+      title: 'Users',
+      url: '/wc/users',
+      icon: Users,
     },
   ],
 }

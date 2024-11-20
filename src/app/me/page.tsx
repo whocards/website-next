@@ -3,7 +3,7 @@ import {redirect} from 'next/navigation'
 import {type Metadata} from 'next'
 import {ProfileForm} from '~/components/forms/profile-form'
 import {Button} from '~/components/ui/button'
-import {PurchasesTable} from '~/features/purchases/PurchasesTable'
+import {PurchasesTable} from '~/features/purchases/purchases-table'
 import {hasPermission} from '~/lib/permissions'
 import {auth} from '~/server/auth'
 import {api} from '~/trpc/server'
@@ -38,7 +38,7 @@ export default async function ProfilePage() {
 
       <div>
         <h2 className='mb-4 text-2xl font-semibold'>Purchase History</h2>
-        <PurchasesTable purchases={myPurchases} />
+        <PurchasesTable data={myPurchases} />
       </div>
     </div>
   )
