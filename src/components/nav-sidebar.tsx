@@ -26,15 +26,15 @@ import {ChartNoAxesCombined, ShoppingCart, Truck} from 'lucide-react'
 
 const navAdmin = {
   navMain: [
-    {title: 'Dashboard', url: '/admin', icon: ChartNoAxesCombined},
+    {title: 'Dashboard', url: '/wc', icon: ChartNoAxesCombined},
     {
       title: 'Purchases',
-      url: '/admin/purchases',
+      url: '/wc/purchases',
       icon: ShoppingCart,
     },
     {
       title: 'Shipments',
-      url: '/admin/shipments',
+      url: '/wc/shipments',
       icon: Truck,
     },
   ],

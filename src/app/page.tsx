@@ -23,7 +23,7 @@ export default async function Home() {
           </Link>
           {canAccessAdmin && (
             <Button asChild>
-              <Link href='/admin'>Admin page</Link>
+              <Link href='/wc'>Admin page</Link>
             </Button>
           )}
         </div>
