@@ -23,8 +23,6 @@ declare module 'next-auth' {
   interface User {
     roles: UserRole[]
   }
-
-  type AdapterUser = User
 }
 
 /**
@@ -33,6 +31,9 @@ declare module 'next-auth' {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
+  pages: {
+    signIn: '/login',
+  },
   providers: [GithubProvider],
   adapter: DrizzleAdapter(db, {
     usersTable: authUsers,

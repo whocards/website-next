@@ -3,19 +3,20 @@ import {redirect} from 'next/navigation'
 import {AppSidebar} from '~/components/nav-sidebar'
 import {SIDEBAR_COOKIE_NAME, SidebarInset} from '~/components/ui/sidebar'
 import {SidebarProvider} from '~/components/ui/sidebar'
+import {hasPermission} from '~/lib/permissions'
 import {auth} from '~/server/auth'
 
 export default async function AdminLayout({children}: {children: React.ReactNode}) {
   const session = await auth()
   const cookie = (await cookies()).get(SIDEBAR_COOKIE_NAME)
 
-  const defaultSidebarOpen = !!cookie?.value && cookie?.value === 'true'
+  const defaultSidebarOpen = cookie?.value === undefined ? undefined : cookie?.value === 'true'
 
   if (!session?.user) {
-    redirect('/api/auth/signin')
+    redirect('/login')
   }
 
-  if (!session.user.roles.includes('admin') && !session.user.roles.includes('owner')) {
+  if (!hasPermission(session.user, 'portal', 'view')) {
     redirect('/')
   }
 
