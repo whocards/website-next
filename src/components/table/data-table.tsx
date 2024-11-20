@@ -80,7 +80,10 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={cn(cell.column.columnDef.size === Number.MAX_SAFE_INTEGER && 'w-full')}
+                      className={cn(
+                        cell.column.columnDef.size === Number.MAX_SAFE_INTEGER && 'w-full',
+                        cell.column.columnDef.size !== Number.MAX_SAFE_INTEGER && 'w-auto'
+                      )}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>

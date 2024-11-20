@@ -8,7 +8,6 @@ import {Checkbox} from '~/components/ui/checkbox'
 import {DataTableColumnHeader} from '~/components/table/data-table-column-header'
 import {DataTableRowActions} from '~/components/table/data-table-row-actions'
 import type {PurchaseWithUserAndShipping} from '~/types/purchases'
-import {Separator} from '~/components/ui/separator'
 
 export const purchaseColumns: ColumnDef<PurchaseWithUserAndShipping>[] = [
   {
