@@ -1,24 +1,27 @@
 'use client'
 
-import {LogOut} from 'lucide-react'
+import Link from 'next/link'
+import {LogOut, User} from 'lucide-react'
 
 import {Avatar, AvatarFallback, AvatarImage} from '~/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
 import {SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar} from '~/components/ui/sidebar'
-import {useSession, signOut} from 'next-auth/react'
+import {signOut} from 'next-auth/react'
+import {useSessionUser} from '~/hooks/use-session-user'
 
 export const NavUser = () => {
   const {isMobile} = useSidebar()
-  const {data: session} = useSession()
+  const user = useSessionUser()
 
-  if (!session?.user) return null
+  if (!user) return null
 
   return (
     <SidebarMenu>
@@ -30,12 +33,12 @@ export const NavUser = () => {
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
               <Avatar className='h-8 w-8 rounded-lg'>
-                <AvatarImage src={session.user.image ?? undefined} alt={session.user.name ?? undefined} />
+                <AvatarImage src={user.image ?? undefined} alt={user.name ?? undefined} />
                 <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-semibold'>{session.user.name}</span>
-                <span className='truncate text-xs'>{session.user.email}</span>
+                <span className='truncate font-semibold'>{user.name}</span>
+                <span className='truncate text-xs'>{user.email}</span>
               </div>
             </SidebarMenuButton>
           </DropdownMenuTrigger>
@@ -48,39 +51,35 @@ export const NavUser = () => {
             <DropdownMenuLabel className='p-0 font-normal'>
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                 <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage src={session.user.image ?? undefined} alt={session.user.name ?? undefined} />
+                  <AvatarImage src={user.image ?? undefined} alt={user.name ?? undefined} />
                   <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
                 </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-semibold'>{session.user.name}</span>
-                  <span className='truncate text-xs'>{session.user.email}</span>
+                  <span className='truncate font-semibold'>{user.name}</span>
+                  <span className='truncate text-xs'>{user.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
-            {/* <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
+              <DropdownMenuItem asChild className='cursor-pointer'>
+                <Link href='/me' className='group'>
+                  <User />
+                  Profile
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              {/* <DropdownMenuItem>
                 <CreditCard />
                 Billing
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
                 Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup> */}
+              </DropdownMenuItem> */}
+            </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => void signOut()}>
+            <DropdownMenuItem onClick={() => void signOut({redirectTo: '/login'})}>
               <LogOut />
               Log out
             </DropdownMenuItem>

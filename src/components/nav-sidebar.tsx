@@ -23,37 +23,26 @@ import Logo from '~/assets/icons/logo.svg'
 import LogoIcon from '~/assets/icons/logo-icon.svg'
 import {NavUser} from './nav-user'
 import {ChartNoAxesCombined, ShoppingCart, Truck} from 'lucide-react'
-import {useSession} from 'next-auth/react'
 
 const navAdmin = {
   navMain: [
-    {title: 'Dashboard', url: '/admin', icon: ChartNoAxesCombined},
+    {title: 'Dashboard', url: '/wc', icon: ChartNoAxesCombined},
     {
       title: 'Purchases',
-      url: '/admin/purchases',
+      url: '/wc/purchases',
       icon: ShoppingCart,
     },
     {
       title: 'Shipments',
-      url: '/admin/shipments',
+      url: '/wc/shipments',
       icon: Truck,
     },
   ],
 }
 
-const navUser = {
-  navMain: [{title: 'My Purchases', url: '/profile', icon: ShoppingCart}],
-}
-
 export function AppSidebar({...props}: ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
   const {open, isMobile} = useSidebar()
-  const {data: session} = useSession()
-
-  let useNav = navUser
-  if (session?.user?.roles.includes('admin') || session?.user?.roles.includes('owner')) {
-    useNav = navAdmin
-  }
 
   return (
     <>
@@ -68,7 +57,7 @@ export function AppSidebar({...props}: ComponentProps<typeof Sidebar>) {
         <SidebarContent>
           <SidebarGroup>
             <SidebarMenu>
-              {useNav.navMain.map((item) => (
+              {navAdmin.navMain.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathname === item.url}>
                     <Link href={item.url}>
