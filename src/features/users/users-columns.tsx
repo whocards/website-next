@@ -1,6 +1,7 @@
 import {type ColumnDef} from '@tanstack/react-table'
 import {WandSparkles, Shield, User} from 'lucide-react'
 import {DataTableColumnHeader} from '~/components/table/data-table-column-header'
+import {DataTableRowActions} from '~/components/table/data-table-row-actions'
 import {Avatar, AvatarFallback, AvatarImage} from '~/components/ui/avatar'
 import {Checkbox} from '~/components/ui/checkbox'
 import {MultiSelect} from '~/components/ui/multi-select'
@@ -33,6 +34,7 @@ export const userColumns: ColumnDef<AuthUser>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+    size: 25,
   },
   {
     accessorKey: 'name',
@@ -72,6 +74,10 @@ export const userColumns: ColumnDef<AuthUser>[] = [
         minimal
       />
     ),
-    size: 500,
+  },
+  {
+    id: 'actions',
+    cell: ({row}) => <DataTableRowActions row={row} />,
+    size: 32,
   },
 ]
