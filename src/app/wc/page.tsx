@@ -1,26 +1,51 @@
-import {ChartCountries} from '~/features/analytics/chart-countries'
-import {ChartPurchases} from '~/features/analytics/chart-purchases'
-import {api} from '~/trpc/server'
+import type {LucideIcon} from 'lucide-react'
+import Link from 'next/link'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '~/components/ui/card'
+import {cn} from '~/lib/utils'
+import {BarChart3, ShoppingCart, Truck, Users} from 'lucide-react'
 
-const regionNames = new Intl.DisplayNames(['en'], {type: 'region'})
+const cards = [
+  {title: 'Analytics', icon: BarChart3, href: '/wc/analytics', description: 'View detailed analytics and insights'},
+  {title: 'Purchases', icon: ShoppingCart, href: '/wc/purchases', description: 'Manage and track customer purchases'},
+  {title: 'Shipments', icon: Truck, href: '/wc/shipments', description: 'Monitor and update shipment statuses'},
+  {title: 'Users', icon: Users, href: '/wc/users', description: 'Manage user accounts and permissions'},
+]
 
-export default async function AnalyticsPage() {
-  const [purchases, countries] = await Promise.all([api.purchases.getByMonth(), api.purchases.getByCountry()])
+interface DashboardCardProps {
+  title: string
+  icon: LucideIcon
+  href: string
+  description: string
+  className?: string
+}
 
-  const countriesWithNames = countries.map((c) => ({
-    ...c,
-    country: regionNames.of(c.country) ?? c.country,
-  }))
-
-  const totalPurchases = purchases.reduce((acc, purchase) => acc + purchase.count, 0)
-
+export function DashboardCard({title, icon: Icon, href, description, className}: DashboardCardProps) {
   return (
-    <div className='flex w-full flex-col gap-5 p-4'>
-      <h1 className='text-center text-2xl md:text-4xl'>Dashboards</h1>
-      <div className='grid grid-cols-1 gap-3'>
-        <ChartPurchases data={purchases} total={totalPurchases} />
-        <ChartCountries data={countriesWithNames} />
+    <Card className={cn('transition-all hover:shadow-lg', className)}>
+      <Link href={href}>
+        <CardHeader className='flex flex-row items-center gap-4 space-y-0 p-6'>
+          <Icon className='h-8 w-8 text-muted-foreground lg:h-16 lg:w-16' />
+          <div className='flex flex-col justify-between'>
+            <CardTitle className='text-sm font-medium md:text-lg lg:text-xl'>{title}</CardTitle>
+            <CardDescription className='text-sm text-muted-foreground md:text-base lg:text-lg'>
+              {description}
+            </CardDescription>
+          </div>
+        </CardHeader>
+      </Link>
+    </Card>
+  )
+}
+
+export default function AnalyticsPage() {
+  return (
+    <>
+      <h1 className='text-3xl'>Dashboards</h1>
+      <div className='grid grid-cols-[repeat(auto-fit,minmax(22rem,1fr))] gap-6'>
+        {cards.map((card) => (
+          <DashboardCard key={card.href} {...card} />
+        ))}
       </div>
-    </div>
+    </>
   )
 }

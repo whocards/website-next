@@ -32,11 +32,11 @@ const navAdmin = {
       url: '/wc/purchases',
       icon: ShoppingCart,
     },
-    {
-      title: 'Shipments',
-      url: '/wc/shipments',
-      icon: Truck,
-    },
+    // {
+    //   title: 'Shipments',
+    //   url: '/wc/shipments',
+    //   icon: Truck,
+    // },
     {
       title: 'Users',
       url: '/wc/users',
