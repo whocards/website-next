@@ -67,6 +67,7 @@ export const userColumns: ColumnDef<AuthUser>[] = [
       <MultiSelect
         options={roleSelectOptions}
         className='w-[26rem]'
+        disabled
         defaultValue={row.original.roles}
         onValueChange={(value) => {
           console.log(value)
