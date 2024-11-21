@@ -44,6 +44,7 @@ export const authConfig = {
     verificationTokensTable: authVerificationTokens,
   }),
   callbacks: {
+    redirect: ({url, baseUrl}) => (url.startsWith(baseUrl) ? url : baseUrl),
     session: ({session, user}) => ({
       ...session,
       user: {
