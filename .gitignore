@@ -45,3 +45,6 @@ yarn-error.log*
 # idea files
 .idea
 db_dump.sql
+
+# Turborepo
+.turbo
