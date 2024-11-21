@@ -1,7 +1,7 @@
 import type {Metadata} from 'next'
 import {cookies} from 'next/headers'
 import {redirect} from 'next/navigation'
-import {AppSidebar} from '~/components/nav-sidebar'
+import {AppSidebar} from '~/components/nav/admin-sidebar'
 import {SIDEBAR_COOKIE_NAME, SidebarInset} from '~/components/ui/sidebar'
 import {SidebarProvider} from '~/components/ui/sidebar'
 import {hasPermission} from '~/lib/permissions'

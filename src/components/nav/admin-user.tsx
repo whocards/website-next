@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import {LogOut, User} from 'lucide-react'
+import {LogOut, User, Sun, Moon} from 'lucide-react'
 
 import {Avatar, AvatarFallback, AvatarImage} from '~/components/ui/avatar'
 import {
@@ -16,10 +16,12 @@ import {
 import {SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar} from '~/components/ui/sidebar'
 import {signOut} from 'next-auth/react'
 import {useSessionUser} from '~/hooks/use-session-user'
+import {useTheme} from 'next-themes'
 
 export const NavUser = () => {
   const {isMobile} = useSidebar()
   const user = useSessionUser()
+  const {resolvedTheme, setTheme} = useTheme()
 
   if (!user) return null
 
@@ -69,14 +71,19 @@ export const NavUser = () => {
                   Profile
                 </Link>
               </DropdownMenuItem>
-              {/* <DropdownMenuItem>
-                <CreditCard />
-                Billing
+              <DropdownMenuItem onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}>
+                {resolvedTheme === 'dark' ? (
+                  <>
+                    <Sun />
+                    Light mode
+                  </>
+                ) : (
+                  <>
+                    <Moon />
+                    Dark mode
+                  </>
+                )}
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem> */}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => void signOut({redirectTo: '/login'})}>
