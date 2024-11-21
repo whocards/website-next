@@ -1,6 +1,7 @@
 import {DrizzleAdapter} from '@auth/drizzle-adapter'
 import {type DefaultSession, type NextAuthConfig} from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
+import GoogleProvider from 'next-auth/providers/google'
 
 import {db} from '~/server/db'
 import {authAccounts, authSessions, authUsers, authVerificationTokens, type UserRole} from '~/server/db/schema'
@@ -34,7 +35,7 @@ export const authConfig = {
   pages: {
     signIn: '/login',
   },
-  providers: [GithubProvider],
+  providers: [GithubProvider, GoogleProvider],
   adapter: DrizzleAdapter(db, {
     usersTable: authUsers,
     accountsTable: authAccounts,

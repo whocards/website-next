@@ -30,7 +30,6 @@ export function LoginForm() {
             <Button
               variant='outline'
               className='w-full'
-              disabled
               onClick={() => {
                 void signIn('google', {redirectTo: '/me'})
               }}
