@@ -5,6 +5,7 @@ import {DataTableRowActions} from '~/components/table/data-table-row-actions'
 import {Avatar, AvatarFallback, AvatarImage} from '~/components/ui/avatar'
 import {Checkbox} from '~/components/ui/checkbox'
 import {MultiSelect} from '~/components/ui/multi-select'
+import {UserAvatar} from '~/components/user-avatar'
 import type {AuthUser} from '~/types/db'
 
 const roleSelectOptions = [
@@ -41,16 +42,7 @@ export const userColumns: ColumnDef<AuthUser>[] = [
     header: ({column}) => <DataTableColumnHeader column={column} title='Name' />,
     cell: ({row}) => (
       <div className='flex items-center gap-2'>
-        <Avatar>
-          <AvatarImage src={row.original.image ?? ''} alt={row.getValue('name') ?? ''} />
-          <AvatarFallback>
-            {row.original.name
-              ?.split(' ')
-              .map((n) => n[0])
-              .join('')
-              .toUpperCase() ?? 'WC'}
-          </AvatarFallback>
-        </Avatar>
+        <UserAvatar image={row.original.image} name={row.original.name} />
         <div>{row.original.name}</div>
       </div>
     ),

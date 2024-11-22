@@ -10,7 +10,7 @@ import {cn} from '~/lib/utils'
 import {Button} from '~/components/ui/button'
 import {Input} from '~/components/ui/input'
 import {Separator} from '~/components/ui/separator'
-import {Sheet, SheetContent, SheetDescription, SheetTitle} from '~/components/ui/sheet'
+import {Sheet, SheetContent, SheetDescription, SheetTitle, SheetVisuallyHidden} from '~/components/ui/sheet'
 import {Skeleton} from '~/components/ui/skeleton'
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from '~/components/ui/tooltip'
 
@@ -155,8 +155,10 @@ const Sidebar = React.forwardRef<
   if (isMobile) {
     return (
       <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-        <SheetTitle className='hidden' />
-        <SheetDescription className='hidden' />
+        <SheetVisuallyHidden>
+          <SheetTitle>Admin Menu</SheetTitle>
+          <SheetDescription>Admin navigation menu</SheetDescription>
+        </SheetVisuallyHidden>
         <SheetContent
           data-sidebar='sidebar'
           data-mobile='true'
