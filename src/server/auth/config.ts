@@ -33,7 +33,6 @@ declare module 'next-auth' {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
-  debug: true,
   pages: {
     signIn: '/login',
   },
@@ -52,16 +51,7 @@ export const authConfig = {
     verificationTokensTable: authVerificationTokens,
   }),
   callbacks: {
-    redirect: ({url, baseUrl}) => {
-      console.log('[NextAuth] Redirect callback invoked:', {url, baseUrl})
-      return url.startsWith(baseUrl) ? url : baseUrl
-    },
-    async signIn({user, account, profile}) {
-      console.log('[NextAuth] SignIn callback invoked:', {user, account, profile})
-      return true // Ensure you don't reject logins unintentionally
-    },
     session: ({session, user}) => {
-      console.log('[NextAuth] Session callback invoked:', {session, user})
       return {
         ...session,
         user: {
