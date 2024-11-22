@@ -2,10 +2,13 @@ import {DrizzleAdapter} from '@auth/drizzle-adapter'
 import {type DefaultSession, type NextAuthConfig} from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
-import {env} from '~/env'
+import ResendProvider from 'next-auth/providers/resend'
 
+import {env} from '~/env'
 import {db} from '~/server/db'
 import {authAccounts, authSessions, authUsers, authVerificationTokens, type UserRole} from '~/server/db/schema'
+
+const from = 'noreply@whocards.cc'
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -33,16 +36,14 @@ declare module 'next-auth' {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
+  debug: env.IS_DEV,
   pages: {
     signIn: '/login',
   },
   providers: [
-    GithubProvider({
-      redirectProxyUrl: env.AUTH_REDIRECT_PROXY_URL,
-    }),
-    GoogleProvider({
-      redirectProxyUrl: env.AUTH_REDIRECT_PROXY_URL,
-    }),
+    GithubProvider({redirectProxyUrl: env.AUTH_REDIRECT_PROXY_URL}),
+    GoogleProvider({redirectProxyUrl: env.AUTH_REDIRECT_PROXY_URL}),
+    ResendProvider({from}),
   ],
   adapter: DrizzleAdapter(db, {
     usersTable: authUsers,
