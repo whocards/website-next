@@ -1,17 +1,16 @@
 'use client'
 
 import type {ColumnDef} from '@tanstack/react-table'
+import Link from 'next/link'
 
 import {Badge} from '~/components/ui/badge'
 import {Checkbox} from '~/components/ui/checkbox'
-
 import {DataTableColumnHeader} from '~/components/table/data-table-column-header'
 import {DataTableRowActions} from '~/components/table/data-table-row-actions'
 import type {PurchaseWithUserAndShipping} from '~/types/purchases'
-import Link from 'next/link'
 import {Button} from '~/components/ui/button'
 
-export const purchaseColumns: ColumnDef<PurchaseWithUserAndShipping>[] = [
+export const columns: ColumnDef<PurchaseWithUserAndShipping>[] = [
   {
     id: 'select',
     header: ({table}) => (

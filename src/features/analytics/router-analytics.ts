@@ -6,7 +6,7 @@ import {purchases, shippings} from '~/server/db/schema'
 
 const dateSql = sql`TO_CHAR(${purchases.date}, 'YYYY-MM')`
 
-export const routerAnalytics = createTRPCRouter({
+export const analyticsRouter = createTRPCRouter({
   purchasesByMonth: protectedProcedure.query(({ctx}) => {
     const permission = hasPermission(ctx.session?.user, 'portal', 'view')
 

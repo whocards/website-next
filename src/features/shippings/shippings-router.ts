@@ -5,7 +5,7 @@ import {hasPermission} from '~/lib/permissions'
 import {createTRPCRouter, protectedProcedure} from '~/server/api/trpc'
 import {shippings} from '~/server/db/schema'
 
-export const routerShippings = createTRPCRouter({
+export const shippingsRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ctx}) => {
     const permission = hasPermission(ctx.session?.user, 'shippings', 'view')
 

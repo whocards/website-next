@@ -6,7 +6,7 @@ import {DataTableRowActions} from '~/components/table/data-table-row-actions'
 import {Checkbox} from '~/components/ui/checkbox'
 import type {Card} from '~/types/db'
 
-export const cardColumns: ColumnDef<Card>[] = [
+export const columns: ColumnDef<Card>[] = [
   {
     id: 'select',
     header: ({table}) => (

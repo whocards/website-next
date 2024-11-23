@@ -1,6 +1,6 @@
 import type {Metadata} from 'next'
 import {DataTable} from '~/components/table/data-table'
-import {purchaseColumns} from '~/features/purchases/purchases-columns'
+import {columns} from '~/features/purchases/purchases-columns'
 import {api} from '~/trpc/server'
 
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ export default async function AdminPage() {
   return (
     <>
       <h1 className='text-3xl font-bold'>Purchases</h1>
-      <DataTable data={purchases} columns={purchaseColumns} />
+      <DataTable data={purchases} columns={columns} />
     </>
   )
 }
