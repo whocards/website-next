@@ -1,8 +1,9 @@
 import {TRPCError} from '@trpc/server'
 import {eq} from 'drizzle-orm'
+import {z} from 'zod'
 import {hasPermission} from '~/lib/permissions'
 import {createTRPCRouter, protectedProcedure} from '~/server/api/trpc'
-import {users} from '~/server/db/schema'
+import {purchases, users} from '~/server/db/schema'
 
 export const purchasesRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ctx}) => {
@@ -10,12 +11,16 @@ export const purchasesRouter = createTRPCRouter({
       throw new TRPCError({code: 'UNAUTHORIZED'})
     }
 
+    // TODO limit returned fields
     return ctx.db.query.purchases.findMany({
       with: {
         user: true,
         shipping: true,
       },
     })
+  }),
+  getById: protectedProcedure.input(z.object({purchaseId: z.string()})).query(async ({ctx, input}) => {
+    return ctx.db.query.purchases.findFirst({where: eq(purchases.id, input.purchaseId)})
   }),
   getMine: protectedProcedure.query(async ({ctx}) => {
     const email = ctx.session?.user?.email

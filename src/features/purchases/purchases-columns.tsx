@@ -8,6 +8,8 @@ import {Checkbox} from '~/components/ui/checkbox'
 import {DataTableColumnHeader} from '~/components/table/data-table-column-header'
 import {DataTableRowActions} from '~/components/table/data-table-row-actions'
 import type {PurchaseWithUserAndShipping} from '~/types/purchases'
+import Link from 'next/link'
+import {Button} from '~/components/ui/button'
 
 export const purchaseColumns: ColumnDef<PurchaseWithUserAndShipping>[] = [
   {
@@ -34,7 +36,13 @@ export const purchaseColumns: ColumnDef<PurchaseWithUserAndShipping>[] = [
   {
     accessorKey: 'id',
     header: ({column}) => <DataTableColumnHeader column={column} title='Purchase' />,
-    cell: ({row}) => <div className='w-24'>WC-{row.original.id.slice(-4)}</div>,
+    cell: ({row}) => (
+      <Button variant='link' asChild className='w-fit p-0'>
+        <Link className='w-24' href={`/wc/purchases/${row.original.id}`}>
+          WC-{row.original.id.slice(-4)}
+        </Link>
+      </Button>
+    ),
     enableSorting: false,
     enableHiding: false,
   },
