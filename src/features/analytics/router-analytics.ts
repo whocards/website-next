@@ -1,16 +1,16 @@
 import {TRPCError} from '@trpc/server'
-import {count, eq, or, sql, sum} from 'drizzle-orm'
+import {count, sql, sum} from 'drizzle-orm'
 import {hasPermission} from '~/lib/permissions'
 import {createTRPCRouter, protectedProcedure} from '~/server/api/trpc'
-import {purchases, shippings, users} from '~/server/db/schema'
+import {purchases, shippings} from '~/server/db/schema'
 
 const dateSql = sql`TO_CHAR(${purchases.date}, 'YYYY-MM')`
 
 export const routerAnalytics = createTRPCRouter({
   purchasesByMonth: protectedProcedure.query(({ctx}) => {
-    const canViewAnalytics = hasPermission(ctx.session?.user, 'portal', 'view')
+    const permission = hasPermission(ctx.session?.user, 'portal', 'view')
 
-    if (!canViewAnalytics) {
+    if (!permission) {
       throw new TRPCError({code: 'UNAUTHORIZED'})
     }
 
@@ -25,9 +25,9 @@ export const routerAnalytics = createTRPCRouter({
       .orderBy(dateSql)
   }),
   purchasesByCountry: protectedProcedure.query(({ctx}) => {
-    const canViewAnalytics = hasPermission(ctx.session?.user, 'portal', 'view')
+    const permission = hasPermission(ctx.session?.user, 'portal', 'view')
 
-    if (!canViewAnalytics) {
+    if (!permission) {
       throw new TRPCError({code: 'UNAUTHORIZED'})
     }
 
@@ -41,9 +41,9 @@ export const routerAnalytics = createTRPCRouter({
       .orderBy(({count}) => count)
   }),
   purchasesByQuantity: protectedProcedure.query(({ctx}) => {
-    const canViewAnalytics = hasPermission(ctx.session?.user, 'portal', 'view')
+    const permission = hasPermission(ctx.session?.user, 'portal', 'view')
 
-    if (!canViewAnalytics) {
+    if (!permission) {
       throw new TRPCError({code: 'UNAUTHORIZED'})
     }
 

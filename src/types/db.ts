@@ -1,7 +1,7 @@
 import {createSelectSchema} from 'drizzle-zod'
 import {z} from 'zod'
 
-import {authUsers, purchases, shippings, UserRoles, users} from '~/server/db/schema'
+import {authUsers, cards, purchases, shippings, UserRoles, users} from '~/server/db/schema'
 
 export const authUserSchema = createSelectSchema(authUsers, {
   roles: z.array(z.enum(UserRoles)),
@@ -16,3 +16,6 @@ export type Purchase = z.infer<typeof purchaseSchema>
 
 export const shippingSchema = createSelectSchema(shippings)
 export type Shipping = z.infer<typeof shippingSchema>
+
+export const cardSchema = createSelectSchema(cards)
+export type Card = z.infer<typeof cardSchema>

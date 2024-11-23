@@ -1,6 +1,6 @@
 'use client'
 
-import type {ComponentProps} from 'react'
+import {useMemo, type ComponentProps} from 'react'
 
 import {
   Sidebar,
@@ -22,10 +22,13 @@ import Link from 'next/link'
 import Logo from '~/assets/icons/logo.svg'
 import LogoIcon from '~/assets/icons/logo-icon.svg'
 import {UserMenu} from './user-menu'
-import {ChartNoAxesCombined, ShoppingCart, Users} from 'lucide-react'
+import {ChartNoAxesCombined, ShoppingCart, Users, Icon} from 'lucide-react'
 import {useSessionUser} from '~/hooks/use-session-user'
+import CardIcon from '~/assets/icons/card.svg'
 import {CurrentUserAvatar} from '../user-avatar'
+import {hasPermission, type Permission} from '~/lib/permissions'
 
+// TODO move up to parent - layout
 const navAdmin = {
   navMain: [
     {title: 'Dashboard', url: '/wc', icon: ChartNoAxesCombined},
@@ -47,10 +50,32 @@ const navAdmin = {
   ],
 }
 
+const navRequirePermission = [
+  {
+    permission: 'cards',
+    title: 'Cards',
+    url: '/wc/cards',
+    icon: CardIcon,
+  },
+]
+
 export function AppSidebar({...props}: ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
   const {open, isMobile} = useSidebar()
   const user = useSessionUser()
+
+  const navMain = useMemo(() => {
+    const items = [...navAdmin.navMain]
+    navRequirePermission.forEach(({permission, ...item}) => {
+      if (hasPermission(user, permission as Permission, 'view')) {
+        items.push({
+          ...item,
+          icon: item.icon as unknown as (typeof navAdmin.navMain)[0]['icon'], // TODO this is a hack
+        })
+      }
+    })
+    return items
+  }, [user])
 
   return (
     <>
@@ -65,7 +90,7 @@ export function AppSidebar({...props}: ComponentProps<typeof Sidebar>) {
         <SidebarContent>
           <SidebarGroup>
             <SidebarMenu>
-              {navAdmin.navMain.map((item) => (
+              {navMain.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathname === item.url}>
                     <Link href={item.url}>
