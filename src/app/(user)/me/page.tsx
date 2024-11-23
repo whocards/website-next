@@ -1,10 +1,7 @@
-import Link from 'next/link'
 import {redirect} from 'next/navigation'
 import {type Metadata} from 'next'
 import {ProfileForm} from '~/components/forms/profile-form'
-import {Button} from '~/components/ui/button'
 import {PurchasesTable} from '~/features/purchases/purchases-table'
-import {hasPermission} from '~/lib/permissions'
 import {auth} from '~/server/auth'
 import {api} from '~/trpc/server'
 
@@ -20,20 +17,12 @@ export default async function ProfilePage() {
     redirect('/login')
   }
 
-  const isAdmin = hasPermission(session?.user, 'portal', 'view')
   const myPurchases = await api.purchases.getMine()
 
   return (
     <div className='container mx-auto flex flex-col gap-8 p-6'>
       <h1 className='text-3xl font-bold'>Profile</h1>
-      {isAdmin && (
-        <p>
-          Role: Admin{' '}
-          <Button asChild variant='link'>
-            <Link href='/wc'>Visit Admin page</Link>
-          </Button>
-        </p>
-      )}
+
       <ProfileForm user={session?.user} />
 
       <div>

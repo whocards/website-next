@@ -21,8 +21,10 @@ import Link from 'next/link'
 
 import Logo from '~/assets/icons/logo.svg'
 import LogoIcon from '~/assets/icons/logo-icon.svg'
-import {NavUser} from './admin-user'
-import {ChartNoAxesCombined, ShoppingCart, Truck, Users} from 'lucide-react'
+import {UserMenu} from './user-menu'
+import {ChartNoAxesCombined, ShoppingCart, Users} from 'lucide-react'
+import {useSessionUser} from '~/hooks/use-session-user'
+import {CurrentUserAvatar} from '../user-avatar'
 
 const navAdmin = {
   navMain: [
@@ -48,6 +50,7 @@ const navAdmin = {
 export function AppSidebar({...props}: ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
   const {open, isMobile} = useSidebar()
+  const user = useSessionUser()
 
   return (
     <>
@@ -84,7 +87,22 @@ export function AppSidebar({...props}: ComponentProps<typeof Sidebar>) {
             </SidebarMenuItem>
           </SidebarMenu>
           <SidebarSeparator />
-          <NavUser />
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <UserMenu>
+                <SidebarMenuButton
+                  size='lg'
+                  className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+                >
+                  <CurrentUserAvatar className='h-8 w-8 rounded-full transition-opacity data-[state=open]:opacity-50' />
+                  <div className='grid flex-1 text-left text-sm leading-tight'>
+                    <span className='truncate font-semibold'>{user?.name}</span>
+                    <span className='truncate text-xs'>{user?.email}</span>
+                  </div>
+                </SidebarMenuButton>
+              </UserMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>

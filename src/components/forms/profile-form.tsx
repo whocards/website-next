@@ -2,11 +2,11 @@
 
 import {useState} from 'react'
 import {Pencil, Check} from 'lucide-react'
-import {Avatar, AvatarFallback, AvatarImage} from '~/components/ui/avatar'
 import {Button} from '~/components/ui/button'
 import {Input} from '~/components/ui/input'
 import {Label} from '~/components/ui/label'
 import type {User} from 'next-auth'
+import {UserAvatar} from '~/components/user-avatar'
 
 interface ProfileFormProps {
   user: User
@@ -27,15 +27,7 @@ export function ProfileForm({user}: ProfileFormProps) {
 
   return (
     <div className='grid grid-cols-[6rem_15rem] gap-2'>
-      <Avatar className='h-24 w-24 self-center'>
-        <AvatarImage src={user.image ?? ''} alt={name} />
-        <AvatarFallback>
-          {name
-            .split(' ')
-            .map((n) => n[0])
-            .join('')}
-        </AvatarFallback>
-      </Avatar>
+      <UserAvatar image={user.image} name={name} className='h-24 w-24 self-center' />
       <div className='flex flex-col items-center gap-2'>
         <div>
           <Label htmlFor='name'>Name</Label>
