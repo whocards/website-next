@@ -16,8 +16,16 @@ const config: NextConfig = {
     turbo: {
       rules: {
         '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
+          loaders: [
+            {
+              loader: '@svgr/webpack',
+              options: {
+                typescript: true,
+                ext: 'tsx',
+              },
+            },
+          ],
+          as: '*.tsx',
         },
       },
     },
@@ -26,7 +34,15 @@ const config: NextConfig = {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     webpackConfig.module.rules.push({
       test: /\.svg$/,
-      use: ['@svgr/webpack'],
+      use: [
+        {
+          loader: '@svgr/webpack',
+          options: {
+            typescript: true,
+            ext: 'tsx',
+          },
+        },
+      ],
     })
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

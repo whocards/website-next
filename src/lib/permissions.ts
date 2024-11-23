@@ -1,7 +1,7 @@
 // copied with love from https://github.com/WebDevSimplified/permission-system/blob/main/auth-abac.ts
 import type {User} from 'next-auth'
 import type {UserRole} from '~/server/db/schema'
-import type {AuthUser, Shipping} from '~/types/db'
+import type {AuthUser, Card, Shipping} from '~/types/db'
 import type {PurchaseWithUserAndShipping} from '~/types/purchases'
 
 type Permissions = {
@@ -11,6 +11,10 @@ type Permissions = {
   }
   users: {
     dataType: Pick<AuthUser, 'name' | 'email' | 'image'>
+    action: 'edit' | 'view'
+  }
+  cards: {
+    dataType: Card
     action: 'edit' | 'view'
   }
   userRoles: {
@@ -27,9 +31,9 @@ type Permissions = {
   }
 }
 
-type PermissionCheck<Key extends keyof Permissions> =
-  | boolean
-  | ((user: User, data: Permissions[Key]['dataType']) => boolean)
+export type Permission = keyof Permissions
+
+type PermissionCheck<Key extends Permission> = boolean | ((user: User, data: Permissions[Key]['dataType']) => boolean)
 
 type RolesWithPermissions = {
   [R in UserRole]: Partial<{
@@ -42,6 +46,10 @@ type RolesWithPermissions = {
 export const ROLES: RolesWithPermissions = {
   owner: {
     portal: {
+      view: true,
+    },
+    cards: {
+      edit: true,
       view: true,
     },
     users: {
@@ -112,7 +120,7 @@ export const ROLES: RolesWithPermissions = {
   },
 } as const
 
-export const hasPermission = <Resource extends keyof Permissions>(
+export const hasPermission = <Resource extends Permission>(
   user: User | undefined,
   resource: Resource,
   action: Permissions[Resource]['action'],
