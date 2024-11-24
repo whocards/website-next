@@ -22,7 +22,7 @@ export default async function ProfilePage() {
     <div className='container mx-auto flex flex-col gap-8 p-6'>
       <h1 className='text-3xl font-bold'>Profile</h1>
 
-      <ProfileForm user={user} />
+      <ProfileForm initialData={user} />
 
       <div>
         <h2 className='mb-4 text-2xl font-semibold'>Purchase History</h2>
