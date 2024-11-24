@@ -22,7 +22,7 @@ import Link from 'next/link'
 import Logo from '~/assets/icons/logo.svg'
 import LogoIcon from '~/assets/icons/logo-icon.svg'
 import {UserMenu} from './user-menu'
-import {ChartNoAxesCombined, ShoppingCart, Users, Truck} from 'lucide-react'
+import {ChartNoAxesCombined, ShoppingCart, Users, Truck, Home} from 'lucide-react'
 import {useSessionUser} from '~/hooks/use-session-user'
 import CardIcon from '~/assets/icons/card-plain.svg'
 import {CurrentUserAvatar} from '../user-avatar'
@@ -31,7 +31,8 @@ import {hasPermission, type Permission} from '~/lib/permissions'
 // TODO move up to parent - layout
 const navAdmin = {
   navMain: [
-    {title: 'Dashboard', url: '/wc', icon: ChartNoAxesCombined},
+    {title: 'Dashboard', url: '/wc', icon: Home},
+    {title: 'Analytics', url: '/wc/analytics', icon: ChartNoAxesCombined},
     {
       title: 'Purchases',
       url: '/wc/purchases',

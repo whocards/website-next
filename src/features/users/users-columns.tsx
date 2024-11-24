@@ -1,12 +1,13 @@
+'use client'
+
 import {type ColumnDef} from '@tanstack/react-table'
 import {WandSparkles, Shield, User} from 'lucide-react'
 import {DataTableColumnHeader} from '~/components/table/data-table-column-header'
-import {DataTableRowActions} from '~/components/table/data-table-row-actions'
-import {Avatar, AvatarFallback, AvatarImage} from '~/components/ui/avatar'
 import {Checkbox} from '~/components/ui/checkbox'
 import {MultiSelect} from '~/components/ui/multi-select'
 import {UserAvatar} from '~/components/user-avatar'
 import type {AuthUser} from '~/types/db'
+import {UserRowActions} from './users-row-actions'
 
 const roleSelectOptions = [
   {value: 'owner', label: 'Owner', icon: WandSparkles},
@@ -14,7 +15,7 @@ const roleSelectOptions = [
   {value: 'user', label: 'User', icon: User},
 ]
 
-export const userColumns: ColumnDef<AuthUser>[] = [
+export const columns: ColumnDef<AuthUser>[] = [
   {
     id: 'select',
     header: ({table}) => (
@@ -70,7 +71,7 @@ export const userColumns: ColumnDef<AuthUser>[] = [
   },
   {
     id: 'actions',
-    cell: ({row}) => <DataTableRowActions row={row} />,
+    cell: ({row}) => <UserRowActions row={row} />,
     size: 32,
   },
 ]

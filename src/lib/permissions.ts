@@ -99,7 +99,7 @@ export const ROLES: RolesWithPermissions = {
   user: {
     users: {
       edit: (user, data) => user.email === data.email, // TODO: add api and ui check
-      view: (user, data) => user.email === data.email, // TODO: add api and ui check
+      view: (user, data) => user.email === data.email, // TODO: ui check
     },
     userRoles: {
       edit: false,
@@ -132,4 +132,10 @@ export const hasPermission = <Resource extends Permission>(
     if (typeof permission === 'function') return !!data && permission(user, data)
     return !!permission
   })
+}
+
+export const hasRole = (user: User | undefined, role: UserRole | UserRole[], exactMatch = false) => {
+  if (!user) return false
+  if (exactMatch) return (Array.isArray(role) ? role : [role]).sort().toString() === user.roles.sort().toString()
+  return (Array.isArray(role) ? role : [role]).some((r) => user.roles.includes(r))
 }

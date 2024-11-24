@@ -5,6 +5,8 @@ export const createQueryClient = () =>
   new QueryClient({
     defaultOptions: {
       queries: {
+        refetchOnMount: false,
+        refetchOnReconnect: false,
         // With SSR, we usually want to set some default staleTime
         // above 0 to avoid refetching immediately on the client
         staleTime: 30 * 1000,

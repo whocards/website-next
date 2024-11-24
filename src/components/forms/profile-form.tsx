@@ -5,17 +5,30 @@ import {Pencil, Check} from 'lucide-react'
 import {Button} from '~/components/ui/button'
 import {Input} from '~/components/ui/input'
 import {Label} from '~/components/ui/label'
-import type {User} from 'next-auth'
 import {UserAvatar} from '~/components/user-avatar'
+import {hasRole} from '~/lib/permissions'
+import type {AuthUser} from '~/types/db'
+import {api} from '~/trpc/react'
 
 interface ProfileFormProps {
-  user: User
+  initialData: AuthUser
 }
 
-export function ProfileForm({user}: ProfileFormProps) {
+export function ProfileForm({initialData}: ProfileFormProps) {
   const [isEditing, setIsEditing] = useState(false)
-  const [name, setName] = useState(user.name ?? '')
-  const [email, setEmail] = useState(user.email ?? '')
+  const [name, setName] = useState(initialData.name ?? '')
+  const [email, setEmail] = useState(initialData.email ?? '')
+
+  const requestAdminAccessMutation = api.users.requestAdminAccess.useMutation()
+  const getById = api.users.getById.useQuery(initialData.id, {
+    initialData,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  })
+
+  const user = getById.data
+
+  if (!user) return null
 
   const handleEditToggle = () => {
     if (isEditing) {
@@ -25,24 +38,27 @@ export function ProfileForm({user}: ProfileFormProps) {
     setIsEditing(!isEditing)
   }
 
+  const requestAdminAccess = async () => {
+    requestAdminAccessMutation.mutate()
+    await getById.refetch()
+  }
+
+  const canRequestAdminAccess = hasRole(user, 'user', true)
+
   return (
-    <div className='grid grid-cols-[6rem_15rem] gap-2'>
+    <div className='grid grid-cols-[6rem_15rem] gap-x-10 gap-y-4'>
       <UserAvatar image={user.image} name={name} className='h-24 w-24 self-center' />
-      <div className='flex flex-col items-center gap-2'>
-        <div>
-          <Label htmlFor='name'>Name</Label>
-          <Input id='name' value={name} onChange={(e) => setName(e.target.value)} disabled={!isEditing} />
-        </div>
-        <div>
-          <Label htmlFor='email'>Email</Label>
-          <Input
-            id='email'
-            type='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={!isEditing}
-          />
-        </div>
+      <div className='flex flex-col gap-2'>
+        <Label htmlFor='name'>Name</Label>
+        <Input
+          id='name'
+          className='mb-2'
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          disabled={!isEditing}
+        />
+        <Label htmlFor='email'>Email</Label>
+        <Input id='email' type='email' value={email} onChange={(e) => setEmail(e.target.value)} disabled={!isEditing} />
       </div>
       <Button onClick={handleEditToggle} variant={isEditing ? 'default' : 'outline'} disabled>
         {isEditing ? (
@@ -56,6 +72,11 @@ export function ProfileForm({user}: ProfileFormProps) {
         )}
         <span className='sr-only'>{isEditing ? 'Save' : 'Edit'}</span>
       </Button>
+      {canRequestAdminAccess && (
+        <Button variant='secondary' disabled={user.requestedAdminAccess} onClick={requestAdminAccess}>
+          Request{user.requestedAdminAccess ? 'ed' : ''} Admin Access
+        </Button>
+      )}
     </div>
   )
 }

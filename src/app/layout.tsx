@@ -6,6 +6,7 @@ import {type Metadata} from 'next'
 import {TRPCReactProvider} from '~/trpc/react'
 import {ThemeProvider} from '~/components/providers'
 import {SessionProvider} from 'next-auth/react'
+import {HydrateClient} from '~/trpc/server'
 
 export const metadata: Metadata = {
   title: 'WhoCards',
@@ -24,15 +25,17 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
       <body>
         <TRPCReactProvider>
           <SessionProvider>
-            <ThemeProvider
-              attribute='class'
-              defaultTheme='system'
-              enableSystem
-              disableTransitionOnChange
-              enableColorScheme
-            >
-              {children}
-            </ThemeProvider>
+            <HydrateClient>
+              <ThemeProvider
+                attribute='class'
+                defaultTheme='system'
+                enableSystem
+                disableTransitionOnChange
+                enableColorScheme
+              >
+                {children}
+              </ThemeProvider>
+            </HydrateClient>
           </SessionProvider>
         </TRPCReactProvider>
       </body>
