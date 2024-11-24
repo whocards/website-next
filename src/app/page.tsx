@@ -4,7 +4,6 @@ import {Navbar} from '~/components/nav/navbar'
 import {Button} from '~/components/ui/button'
 import {hasPermission} from '~/lib/permissions'
 import {auth} from '~/server/auth'
-import {HydrateClient} from '~/trpc/server'
 
 export default async function Home() {
   const session = await auth()

@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import {useMemo} from 'react'
-import {Label, LabelList, Pie, PieChart} from 'recharts'
+import {LabelList, Pie, PieChart} from 'recharts'
 
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '~/components/ui/card'
 import {type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent} from '~/components/ui/chart'
