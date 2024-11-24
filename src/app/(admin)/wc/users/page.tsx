@@ -1,6 +1,6 @@
 import type {Metadata} from 'next'
-import {DataTable} from '~/components/table/data-table'
-import {userColumns} from '~/features/users/users-columns'
+import {Suspense} from 'react'
+import {UsersTable} from '~/features/users/users-table'
 import {api} from '~/trpc/server'
 
 export const metadata: Metadata = {
@@ -9,12 +9,14 @@ export const metadata: Metadata = {
 }
 
 export default async function AdminPage() {
-  const users = await api.users.getAll()
+  const data = await api.users.getAll()
 
   return (
     <>
       <h1 className='text-3xl font-bold'>Users</h1>
-      <DataTable data={users} columns={userColumns} />
+      <Suspense>
+        <UsersTable initialData={data} />
+      </Suspense>
     </>
   )
 }

@@ -1,5 +1,5 @@
 import {relations} from 'drizzle-orm'
-import {index, integer, pgEnum, primaryKey, text, timestamp, varchar} from 'drizzle-orm/pg-core'
+import {boolean, index, integer, pgEnum, primaryKey, text, timestamp, varchar} from 'drizzle-orm/pg-core'
 import {type AdapterAccount} from 'next-auth/adapters'
 import * as Utils from '../utils'
 
@@ -17,6 +17,7 @@ export const authUsers = Utils.createAuthTable('user', {
   emailVerified: timestamp('email_verified', Utils.timestampSettings).default(Utils.currentTimestamp),
   image: varchar('image', {length: 255}),
   roles: userRoleEnum('roles').array().default(defaultUserRole).notNull(),
+  requestedAdminAccess: boolean('requested_admin_access').default(false).notNull(),
 })
 
 export const authUsersRelations = relations(authUsers, ({many}) => ({

@@ -7,7 +7,7 @@ import {purchases, users} from '~/server/db/schema'
 
 export const purchasesRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ctx}) => {
-    if (!hasPermission(ctx.session?.user, 'portal', 'view')) {
+    if (!hasPermission(ctx.session?.user, 'purchases', 'view')) {
       throw new TRPCError({code: 'UNAUTHORIZED'})
     }
 
@@ -19,8 +19,8 @@ export const purchasesRouter = createTRPCRouter({
       },
     })
   }),
-  getById: protectedProcedure.input(z.object({purchaseId: z.string()})).query(async ({ctx, input}) => {
-    return ctx.db.query.purchases.findFirst({where: eq(purchases.id, input.purchaseId)})
+  getById: protectedProcedure.input(z.string()).query(async ({ctx, input}) => {
+    return ctx.db.query.purchases.findFirst({where: eq(purchases.id, input)})
   }),
   getMine: protectedProcedure.query(async ({ctx}) => {
     const email = ctx.session?.user?.email

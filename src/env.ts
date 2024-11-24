@@ -17,6 +17,7 @@ export const env = createEnv({
     DATABASE_URL: z.string().url(),
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
     IS_DEV: z.boolean(),
+    SSR_CLIENT_COOKIE_SECRET: z.string(),
   },
 
   /**
@@ -43,6 +44,7 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     IS_DEV: process.env.NODE_ENV === 'development',
+    SSR_CLIENT_COOKIE_SECRET: process.env.SSR_CLIENT_COOKIE_SECRET,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

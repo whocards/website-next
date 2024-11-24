@@ -1,6 +1,6 @@
 import type {LucideIcon} from 'lucide-react'
 import Link from 'next/link'
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '~/components/ui/card'
+import {Card, CardDescription, CardHeader, CardTitle} from '~/components/ui/card'
 import {cn} from '~/lib/utils'
 import {BarChart3, ShoppingCart, Truck, Users} from 'lucide-react'
 
@@ -40,7 +40,7 @@ export function DashboardCard({title, icon: Icon, href, description, className}:
 export default function AnalyticsPage() {
   return (
     <>
-      <h1 className='text-3xl'>Dashboards</h1>
+      <h1 className='text-3xl'>Dashboard</h1>
       <div className='grid grid-cols-[repeat(auto-fit,minmax(22rem,1fr))] gap-6'>
         {cards.map((card) => (
           <DashboardCard key={card.href} {...card} />

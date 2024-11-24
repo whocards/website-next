@@ -7,13 +7,14 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-  params: {
+  params: Promise<{
     purchaseId: string
-  }
+  }>
 }
 
 export default async function PurchaseDetailsPage({params}: Props) {
-  const data = await api.purchases.getById({purchaseId: params.purchaseId})
+  const {purchaseId} = await params
+  const data = await api.purchases.getById(purchaseId)
 
   return (
     <>
