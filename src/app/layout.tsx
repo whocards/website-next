@@ -3,10 +3,10 @@ import '~/styles/globals.css'
 import {GeistSans} from 'geist/font/sans'
 import {type Metadata} from 'next'
 
-import {TRPCReactProvider} from '~/trpc/react'
-import {ThemeProvider} from '~/components/providers'
-import {SessionProvider} from 'next-auth/react'
-import {HydrateClient} from '~/trpc/server'
+import {ThemeProvider} from '~/components/providers/theme'
+import {AnalyticsProvider} from '~/components/providers/analytics'
+import {ServerProviders} from '~/components/providers/server'
+import {AnalyticsPageView} from '~/components/analytics-page-view'
 
 export const metadata: Metadata = {
   title: 'WhoCards',
@@ -22,23 +22,22 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
   return (
     <html lang='en' className={`${GeistSans.variable}`} suppressHydrationWarning>
-      <body>
-        <TRPCReactProvider>
-          <SessionProvider>
-            <HydrateClient>
-              <ThemeProvider
-                attribute='class'
-                defaultTheme='system'
-                enableSystem
-                disableTransitionOnChange
-                enableColorScheme
-              >
-                {children}
-              </ThemeProvider>
-            </HydrateClient>
-          </SessionProvider>
-        </TRPCReactProvider>
-      </body>
+      <AnalyticsProvider>
+        <ServerProviders>
+          <body>
+            <AnalyticsPageView />
+            <ThemeProvider
+              attribute='class'
+              defaultTheme='system'
+              enableSystem
+              disableTransitionOnChange
+              enableColorScheme
+            >
+              {children}
+            </ThemeProvider>
+          </body>
+        </ServerProviders>
+      </AnalyticsProvider>
     </html>
   )
 }
