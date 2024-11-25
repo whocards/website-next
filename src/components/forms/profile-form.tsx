@@ -9,6 +9,7 @@ import {UserAvatar} from '~/components/user-avatar'
 import {hasRole} from '~/lib/permissions'
 import type {AuthUser} from '~/types/db'
 import {api} from '~/trpc/react'
+import {useToast} from '~/hooks/use-toast'
 
 interface ProfileFormProps {
   initialData: AuthUser
@@ -18,6 +19,7 @@ export function ProfileForm({initialData}: ProfileFormProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [name, setName] = useState(initialData.name ?? '')
   const [email, setEmail] = useState(initialData.email ?? '')
+  const {toast} = useToast()
 
   const requestAdminAccessMutation = api.users.requestAdminAccess.useMutation()
   const getById = api.users.getById.useQuery(initialData.id, {
@@ -41,6 +43,10 @@ export function ProfileForm({initialData}: ProfileFormProps) {
   const requestAdminAccess = async () => {
     requestAdminAccessMutation.mutate()
     await getById.refetch()
+    toast({
+      title: 'Admin access requested',
+      description: 'You will be notified when your access is approved',
+    })
   }
 
   const canRequestAdminAccess = hasRole(user, 'user', true)

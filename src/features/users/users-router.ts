@@ -20,11 +20,13 @@ export const usersRouter = createTRPCRouter({
     return user
   }),
   getById: protectedProcedure.input(z.string()).query(async ({ctx, input}) => {
-    if (!hasPermission(ctx.session?.user, 'users', 'view')) {
+    const user = await ctx.db.query.authUsers.findFirst({where: eq(authUsers.id, input)})
+
+    if (!hasPermission(ctx.session?.user, 'users', 'view', user)) {
       throw new TRPCError({code: 'UNAUTHORIZED'})
     }
 
-    return ctx.db.query.authUsers.findFirst({where: eq(authUsers.id, input)})
+    return user
   }),
   getAll: protectedProcedure.query(async ({ctx}) => {
     if (!hasPermission(ctx.session?.user, 'users', 'view')) {
@@ -38,6 +40,16 @@ export const usersRouter = createTRPCRouter({
   requestAdminAccess: protectedProcedure.mutation(async ({ctx}) => {
     if (!hasRole(ctx.session?.user, 'user', true)) {
       throw new TRPCError({code: 'BAD_REQUEST', message: 'You already have admin access'})
+    }
+
+    const user = await ctx.db.query.authUsers.findFirst({where: eq(authUsers.id, ctx.session?.user.id)})
+
+    if (!user) {
+      throw new TRPCError({code: 'NOT_FOUND', message: 'User not found'})
+    }
+
+    if (!hasPermission(ctx.session?.user, 'users', 'edit', user)) {
+      throw new TRPCError({code: 'UNAUTHORIZED'})
     }
 
     return ctx.db.update(authUsers).set({requestedAdminAccess: true}).where(eq(authUsers.id, ctx.session?.user.id))

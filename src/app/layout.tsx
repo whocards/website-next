@@ -7,6 +7,7 @@ import {ThemeProvider} from '~/components/providers/theme'
 import {AnalyticsProvider} from '~/components/providers/analytics'
 import {ServerProviders} from '~/components/providers/server'
 import {AnalyticsPageView} from '~/components/analytics-page-view'
+import {Toaster} from '~/components/ui/toaster'
 
 export const metadata: Metadata = {
   title: 'WhoCards',
@@ -34,6 +35,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
               enableColorScheme
             >
               {children}
+              <Toaster />
             </ThemeProvider>
           </body>
         </ServerProviders>
