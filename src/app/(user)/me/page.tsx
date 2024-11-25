@@ -11,12 +11,13 @@ export const metadata: Metadata = {
 }
 
 export default async function ProfilePage() {
-  const data = await api.purchases.getMine()
   const user = await api.users.getMe()
 
   if (!user) {
     redirect('/login')
   }
+
+  const data = await api.purchases.getMine()
 
   return (
     <div className='container mx-auto flex flex-col gap-8 p-6'>

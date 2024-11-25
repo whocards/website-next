@@ -38,6 +38,7 @@ declare module 'next-auth' {
 export const authConfig = {
   pages: {
     signIn: '/login',
+    signOut: '/logout',
   },
   providers: [
     GithubProvider({redirectProxyUrl: env.AUTH_REDIRECT_PROXY_URL}),

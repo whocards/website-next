@@ -7,13 +7,17 @@ import {authUsers} from '~/server/db/schema'
 
 export const usersRouter = createTRPCRouter({
   getMe: protectedProcedure.query(async ({ctx}) => {
-    const canView = hasPermission(ctx.session?.user, 'users', 'view')
+    if (!ctx.session?.user) {
+      return
+    }
 
-    if (!canView) {
+    const user = await ctx.db.query.authUsers.findFirst({where: eq(authUsers.id, ctx.session?.user.id)})
+
+    if (!hasPermission(ctx.session?.user, 'users', 'view', user)) {
       throw new TRPCError({code: 'UNAUTHORIZED'})
     }
 
-    return ctx.db.query.authUsers.findFirst({where: eq(authUsers.id, ctx.session?.user.id)})
+    return user
   }),
   getById: protectedProcedure.input(z.string()).query(async ({ctx, input}) => {
     if (!hasPermission(ctx.session?.user, 'users', 'view')) {
