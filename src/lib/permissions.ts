@@ -10,7 +10,7 @@ type Permissions = {
     action: 'view'
   }
   users: {
-    dataType: Pick<AuthUser, 'name' | 'email' | 'image'>
+    dataType: Pick<AuthUser, 'name' | 'email' | 'image' | 'id'>
     action: 'edit' | 'view'
   }
   cards: {
@@ -98,8 +98,8 @@ export const ROLES: RolesWithPermissions = {
   },
   user: {
     users: {
-      edit: (user, data) => user.email === data.email, // TODO: add api and ui check
-      view: (user, data) => user.email === data.email, // TODO: ui check
+      edit: (user, data) => user.id === data.id, // TODO: ui check
+      view: (user, data) => user.id === data.id, // TODO: ui check
     },
     userRoles: {
       edit: false,
