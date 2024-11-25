@@ -1,13 +1,13 @@
 'use client'
 
 import {usePathname, useSearchParams} from 'next/navigation'
-import {useEffect} from 'react'
+import {Suspense, useEffect} from 'react'
 import {usePostHog} from 'posthog-js/react'
 import {useSession} from 'next-auth/react'
 
 import {env} from '~/env'
 
-export const AnalyticsPageView = () => {
+const PageViews = () => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const posthog = usePostHog()
@@ -46,4 +46,12 @@ export const AnalyticsPageView = () => {
   }, [posthog, user, status])
 
   return null
+}
+
+export const AnalyticsPageView = () => {
+  return (
+    <Suspense>
+      <PageViews />
+    </Suspense>
+  )
 }
