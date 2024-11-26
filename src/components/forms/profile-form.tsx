@@ -15,11 +15,13 @@ interface ProfileFormProps {
   initialData: AuthUser
 }
 
+// TODO make this a form not state
 export function ProfileForm({initialData}: ProfileFormProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [name, setName] = useState(initialData.name ?? '')
   const [email, setEmail] = useState(initialData.email ?? '')
   const {toast} = useToast()
+  const apiUtils = api.useUtils()
 
   const requestAdminAccessMutation = api.users.requestAdminAccess.useMutation()
   const getById = api.users.getById.useQuery(initialData.id, {
@@ -41,12 +43,20 @@ export function ProfileForm({initialData}: ProfileFormProps) {
   }
 
   const requestAdminAccess = async () => {
-    requestAdminAccessMutation.mutate()
-    await getById.refetch()
-    toast({
-      title: 'Admin access requested',
-      description: 'You will be notified when your access is approved',
-    })
+    try {
+      await requestAdminAccessMutation.mutateAsync()
+      void apiUtils.users.getById.invalidate()
+      toast({
+        title: 'Admin access requested',
+        description: 'You will be notified when your access is approved',
+      })
+    } catch (error) {
+      console.error('Error requesting admin access', error)
+      toast({
+        title: 'Error',
+        description: 'Something went wrong',
+      })
+    }
   }
 
   const canRequestAdminAccess = hasRole(user, 'user', true)
