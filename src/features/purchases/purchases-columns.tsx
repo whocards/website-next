@@ -1,58 +1,50 @@
 'use client'
 
 import type {ColumnDef} from '@tanstack/react-table'
-import Link from 'next/link'
 
 import {Badge} from '~/components/ui/badge'
-import {Checkbox} from '~/components/ui/checkbox'
 import {DataTableColumnHeader} from '~/components/table/data-table-column-header'
-import {DataTableRowActions} from '~/components/table/data-table-row-actions'
 import type {PurchaseWithUserAndShipping} from '~/types/purchases'
-import {Button} from '~/components/ui/button'
+// import {PurchaseRowActions} from './purchase-row-actions'
 
 export const columns: ColumnDef<PurchaseWithUserAndShipping>[] = [
-  {
-    id: 'select',
-    header: ({table}) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label='Select all'
-        className='translate-y-[2px]'
-      />
-    ),
-    cell: ({row}) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label='Select row'
-        className='translate-y-[2px]'
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   id: 'select',
+  //   header: ({table}) => (
+  //     <Checkbox
+  //       checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label='Select all'
+  //       className='translate-y-[2px]'
+  //     />
+  //   ),
+  //   cell: ({row}) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label='Select row'
+  //       className='translate-y-[2px]'
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: 'id',
-    header: ({column}) => <DataTableColumnHeader column={column} title='Purchase' />,
-    cell: ({row}) => (
-      <Button variant='link' asChild className='w-fit p-0'>
-        <Link className='w-24' href={`/wc/purchases/${row.original.id}`}>
-          WC-{row.original.id.slice(-4)}
-        </Link>
-      </Button>
-    ),
+    header: ({column}) => <DataTableColumnHeader column={column} title='ID' />,
+    cell: ({row}) => <span className='whitespace-nowrap'>WC-{row.original.id.slice(-4)}</span>,
     enableSorting: false,
     enableHiding: false,
+    size: 100,
   },
   {
     accessorKey: 'user.name',
     header: ({column}) => <DataTableColumnHeader column={column} title='Name' />,
-    size: Number.MAX_SAFE_INTEGER,
+    // size: Number.MAX_SAFE_INTEGER,
     cell: ({row}) => {
       return (
         <div className='flex w-full items-center gap-2'>
-          <div className='text-sm text-muted-foreground'>{row.original.user.name}</div>
+          <>{row.original.user.name}</>
           {row.original.shipping.company && <Badge variant='secondary'>{row.original.shipping.company}</Badge>}
         </div>
       )
@@ -62,13 +54,7 @@ export const columns: ColumnDef<PurchaseWithUserAndShipping>[] = [
     accessorKey: 'shipping.quantity',
     header: ({column}) => <DataTableColumnHeader column={column} title='Quantity' />,
     cell: ({row}) => {
-      return (
-        <div className='flex items-center gap-2'>
-          <div>{row.original.shipping.quantity}</div>
-          {/* <Separator orientation='vertical' className='h-4' />
-          <div>{row.original.category}</div> */}
-        </div>
-      )
+      return <>{row.original.shipping.quantity}</>
     },
   },
   {
@@ -134,8 +120,9 @@ export const columns: ColumnDef<PurchaseWithUserAndShipping>[] = [
   //     return value.includes(row.getValue(id))
   //   },
   // },
-  {
-    id: 'actions',
-    cell: ({row}) => <DataTableRowActions row={row} />,
-  },
+  // {
+  //   id: 'actions',
+  //   cell: ({row}) => <PurchaseRowActions row={row} />,
+  //   size: 0,
+  // },
 ]

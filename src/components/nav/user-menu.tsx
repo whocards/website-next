@@ -17,10 +17,11 @@ import {useSessionUser} from '~/hooks/use-session-user'
 import {useTheme} from 'next-themes'
 import {UserAvatar} from '../user-avatar'
 import type {DropdownMenuContentProps} from '@radix-ui/react-dropdown-menu'
+import {memo} from 'react'
 
 type Props = DropdownMenuContentProps
 
-export const UserMenu = ({side = 'bottom', align = 'end', children, ...props}: Props) => {
+export const UserMenu = memo(({side = 'bottom', align = 'end', children, ...props}: Props) => {
   const user = useSessionUser()
   const {resolvedTheme, setTheme} = useTheme()
 
@@ -77,4 +78,6 @@ export const UserMenu = ({side = 'bottom', align = 'end', children, ...props}: P
       </DropdownMenuContent>
     </DropdownMenu>
   )
-}
+})
+
+UserMenu.displayName = 'UserMenu'
