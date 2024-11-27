@@ -20,7 +20,7 @@ export const purchasesRouter = createTRPCRouter({
     })
   }),
   getById: protectedProcedure.input(z.string()).query(async ({ctx, input}) => {
-    return ctx.db.query.purchases.findFirst({where: eq(purchases.id, input)})
+    return ctx.db.query.purchases.findFirst({where: eq(purchases.id, input), with: {user: true, shipping: true}})
   }),
   getMine: protectedProcedure.query(async ({ctx}) => {
     const email = ctx.session?.user?.email
@@ -32,7 +32,8 @@ export const purchasesRouter = createTRPCRouter({
     const user = await ctx.db.query.users.findFirst({where: eq(users.email, email)})
 
     if (!user) {
-      return []
+      // || !hasPermission(ctx.session?.user, 'purchases', 'view')) {
+      throw new TRPCError({code: 'UNAUTHORIZED'})
     }
 
     return ctx.db.query.purchases.findMany({

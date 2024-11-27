@@ -7,7 +7,7 @@ export const users = Utils.createTable('user', {
   id: serial('id').primaryKey(),
   email: text('email').notNull().unique(),
   name: text('name').notNull(),
-  newsletter: boolean('newsletter').default(false).notNull(),
+  newsletter: boolean('newsletter').notNull().default(false),
 })
 
 export const usersRelations = relations(users, ({many}) => ({

@@ -15,6 +15,7 @@ const config: NextConfig = {
   //   },
   // },
   experimental: {
+    reactCompiler: true,
     turbo: {
       rules: {
         '*.svg': {

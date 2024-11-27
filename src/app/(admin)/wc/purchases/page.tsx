@@ -14,7 +14,7 @@ export default async function AdminPage() {
   return (
     <>
       <h1 className='text-3xl font-bold'>Purchases</h1>
-      <DataTable data={purchases} columns={columns} />
+      <DataTable data={purchases} columns={columns} rowLink />
     </>
   )
 }

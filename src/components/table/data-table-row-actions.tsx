@@ -22,6 +22,7 @@ interface DataTableRowActionsProps<TData> {
   row: Row<TData>
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function DataTableRowActions<TData>({row}: DataTableRowActionsProps<TData>) {
   // const task = taskSchema.parse(row.original)
 
