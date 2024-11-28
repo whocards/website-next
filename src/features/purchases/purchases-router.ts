@@ -3,7 +3,8 @@ import {eq} from 'drizzle-orm'
 import {z} from 'zod'
 import {hasPermission} from '~/lib/permissions'
 import {createTRPCRouter, protectedProcedure} from '~/server/api/trpc'
-import {purchases, users} from '~/server/db/schema'
+import {purchases, shippings, users} from '~/server/db/schema'
+import {purchaseCompleteCreateSchema, purchaseCompleteSchema} from '~/types/db'
 
 export const purchasesRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ctx}) => {
@@ -26,14 +27,13 @@ export const purchasesRouter = createTRPCRouter({
     const email = ctx.session?.user?.email
 
     if (!email) {
-      throw new TRPCError({code: 'UNAUTHORIZED'})
+      throw new TRPCError({code: 'UNAUTHORIZED', message: 'No email found'})
     }
 
     const user = await ctx.db.query.users.findFirst({where: eq(users.email, email)})
 
     if (!user) {
-      // || !hasPermission(ctx.session?.user, 'purchases', 'view')) {
-      throw new TRPCError({code: 'UNAUTHORIZED'})
+      return []
     }
 
     return ctx.db.query.purchases.findMany({
@@ -42,6 +42,48 @@ export const purchasesRouter = createTRPCRouter({
         user: true,
         shipping: true,
       },
+    })
+  }),
+  updateOne: protectedProcedure.input(purchaseCompleteSchema).mutation(async ({ctx, input}) => {
+    if (!hasPermission(ctx.session?.user, 'purchases', 'edit')) {
+      throw new TRPCError({code: 'UNAUTHORIZED'})
+    }
+
+    return ctx.db.update(purchases).set(input).where(eq(purchases.id, input.id))
+  }),
+  createOne: protectedProcedure.input(purchaseCompleteCreateSchema).mutation(async ({ctx, input}) => {
+    if (!hasPermission(ctx.session?.user, 'purchases', 'create')) {
+      throw new TRPCError({code: 'UNAUTHORIZED'})
+    }
+
+    const {price, netPrice, category} = input
+
+    return ctx.db.transaction(async (tx) => {
+      const [user] = await tx
+        .insert(users)
+        .values(input.user)
+        .onConflictDoUpdate({target: [users.email], set: {name: input.user.name}})
+        .returning()
+      if (!user) {
+        tx.rollback()
+        // TODO make this a zod error
+        throw new TRPCError({code: 'INTERNAL_SERVER_ERROR'})
+      }
+
+      const [purchase] = await tx
+        .insert(purchases)
+        .values({id: crypto.randomUUID(), price, netPrice, category, userId: user.id, date: new Date()})
+        .returning()
+      if (!purchase) {
+        tx.rollback()
+        // TODO make this a zod error
+        throw new TRPCError({code: 'INTERNAL_SERVER_ERROR'})
+      }
+
+      return tx
+        .insert(shippings)
+        .values({...input.shipping, purchaseId: purchase.id})
+        .returning()
     })
   }),
 })
