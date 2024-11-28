@@ -135,7 +135,6 @@ export const PurchaseForm = ({purchase}: Props) => {
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                   <FormLabel className='leading-4'>Subscribe to Newsletter</FormLabel>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -148,20 +147,20 @@ export const PurchaseForm = ({purchase}: Props) => {
                 return (
                   <FormItem>
                     <FormLabel className='leading-4'>Category</FormLabel>
-                    <FormControl>
-                      <Select onValueChange={field.onChange} defaultValue={field.value} {...field}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} {...field}>
+                      <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder='Select a category'>{field.value}</SelectValue>
                         </SelectTrigger>
-                        <SelectContent>
-                          {categories.map((category) => (
-                            <SelectItem key={category} value={category}>
-                              {category}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
+                      </FormControl>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )
@@ -184,26 +183,26 @@ export const PurchaseForm = ({purchase}: Props) => {
             <FormField
               name='price'
               control={form.control}
-              render={({field: {value, onChange, ...field}}) => (
+              render={({field}) => (
                 <FormItem>
                   <FormLabel>Price</FormLabel>
-                  <FormControl>
-                    <div className='relative'>
-                      <span className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 text-sm text-muted-foreground'>
-                        €
-                      </span>
+                  <div className='relative'>
+                    <span className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 text-sm text-muted-foreground'>
+                      €
+                    </span>
+                    <FormControl>
                       <Input
                         placeholder='Price of items'
                         min={0}
                         className='pl-6'
                         {...field}
-                        value={value / 100}
+                        value={field.value / 100}
                         onChange={(e) => {
-                          onChange(Number(e.target.value.replace(/\D/g, '')))
+                          field.onChange(Number(e.target.value.replace(/\D/g, '')))
                         }}
                       />
-                    </div>
-                  </FormControl>
+                    </FormControl>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -211,26 +210,26 @@ export const PurchaseForm = ({purchase}: Props) => {
             <FormField
               name='netPrice'
               control={form.control}
-              render={({field: {value, onChange, ...field}}) => (
+              render={({field}) => (
                 <FormItem>
                   <FormLabel>Net Price</FormLabel>
-                  <FormControl>
-                    <div className='relative'>
-                      <span className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 text-sm text-muted-foreground'>
-                        €
-                      </span>
+                  <div className='relative'>
+                    <span className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 text-sm text-muted-foreground'>
+                      €
+                    </span>
+                    <FormControl>
                       <Input
                         placeholder='Net Price of items'
                         min={0}
                         className='pl-6'
                         {...field}
-                        value={value / 100}
+                        value={field.value / 100}
                         onChange={(e) => {
-                          onChange(Number(e.target.value.replace(/\D/g, '')))
+                          field.onChange(Number(e.target.value.replace(/\D/g, '')))
                         }}
                       />
-                    </div>
-                  </FormControl>
+                    </FormControl>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -356,19 +355,23 @@ export const PurchaseForm = ({purchase}: Props) => {
         </Tabs>
         <div
           className='ml-auto grid w-full grid-cols-2 gap-2 pb-4 pt-6 md:col-start-2 md:w-1/2 md:gap-4 md:pl-2 md:pr-4'
-          onMouseEnter={() => {
-            void form.trigger()
-            console.log(form.formState)
-          }}
+          onMouseEnter={() => void form.trigger()}
         >
-          <Button variant='destructive' onClick={() => router.back()}>
+          <Button
+            variant='destructive'
+            type='button'
+            onClick={(e) => {
+              e.stopPropagation()
+              router.back()
+            }}
+          >
             Cancel
           </Button>
           {tab === 'purchase' ? (
             <Button
               type='button'
               onClick={(e) => {
-                e.preventDefault()
+                e.stopPropagation()
                 void setTab('shipping')
               }}
             >
