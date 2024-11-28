@@ -3,6 +3,7 @@
 import {useState} from 'react'
 import {useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
+import {parseAsStringLiteral, useQueryState} from 'nuqs'
 
 import {useRouter} from 'next/navigation'
 import {Button} from '~/components/ui/button'
@@ -23,6 +24,9 @@ import {api} from '~/trpc/react'
 import {cn} from '~/lib/utils'
 import {parseError} from '~/lib/error'
 
+const tabOptions = ['purchase', 'shipping'] as const
+type TabOption = (typeof tabOptions)[number]
+
 type Props = {
   purchase?: PurchaseComplete
 }
@@ -33,6 +37,7 @@ export const PurchaseForm = ({purchase}: Props) => {
   const {toast} = useToast()
   const router = useRouter()
   const user = useUser()
+  const [tab, setTab] = useQueryState<TabOption>('tab', parseAsStringLiteral(tabOptions).withDefault('purchase'))
 
   const editOne = api.purchases.updateOne.useMutation()
   const createOne = api.purchases.createOne.useMutation()
@@ -72,7 +77,11 @@ export const PurchaseForm = ({purchase}: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='mx-auto w-full max-w-2xl md:rounded-lg md:border'>
-        <Tabs defaultValue='purchase' className={cn('w-full', !canEdit && 'pointer-events-none')}>
+        <Tabs
+          value={tab}
+          onValueChange={(value) => void setTab(value as TabOption)}
+          className={cn('w-full', !canEdit && 'pointer-events-none')}
+        >
           <TabsList className='grid w-full grid-cols-2 md:rounded-b-none'>
             <TabsTrigger value='purchase'>Purchase</TabsTrigger>
             <TabsTrigger value='shipping'>Shipping</TabsTrigger>
@@ -355,9 +364,21 @@ export const PurchaseForm = ({purchase}: Props) => {
           <Button variant='destructive' onClick={() => router.back()}>
             Cancel
           </Button>
-          <Button type='submit' disabled={isLoading || !canEdit || !form.formState.isValid}>
-            {isUpdate ? 'Update' : 'Create'}
-          </Button>
+          {tab === 'purchase' ? (
+            <Button
+              type='button'
+              onClick={(e) => {
+                e.preventDefault()
+                void setTab('shipping')
+              }}
+            >
+              Next
+            </Button>
+          ) : (
+            <Button type='submit' disabled={isLoading || !canEdit || !form.formState.isValid}>
+              {isUpdate ? 'Update' : 'Create'}
+            </Button>
+          )}
         </div>
       </form>
     </Form>
