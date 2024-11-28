@@ -27,14 +27,13 @@ export const purchasesRouter = createTRPCRouter({
     const email = ctx.session?.user?.email
 
     if (!email) {
-      throw new TRPCError({code: 'UNAUTHORIZED'})
+      throw new TRPCError({code: 'UNAUTHORIZED', message: 'No email found'})
     }
 
     const user = await ctx.db.query.users.findFirst({where: eq(users.email, email)})
 
     if (!user) {
-      // || !hasPermission(ctx.session?.user, 'purchases', 'view')) {
-      throw new TRPCError({code: 'UNAUTHORIZED'})
+      return []
     }
 
     return ctx.db.query.purchases.findMany({
