@@ -23,11 +23,6 @@ import {api, type RouterOutputs} from '~/trpc/react'
 import {cn} from '~/lib/utils'
 import {parseError} from '~/lib/error'
 
-const currencyFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'EUR',
-})
-
 type Props = {
   purchase?: PurchaseComplete
 }
@@ -49,18 +44,14 @@ export const PurchaseForm = ({purchase}: Props) => {
   })
 
   const onSubmit = async (data: PurchaseComplete) => {
-    data.price = parseInt(`${data.price}`) * 100
-    data.netPrice = parseInt(`${data.netPrice}`) * 100
-
-    let newPurchase: RouterOutputs['purchases']['createOne'][number] | undefined
     try {
       if (purchase) {
         await editOne.mutateAsync(data)
       } else {
-        newPurchase = (await createOne.mutateAsync(data))?.[0]
-      }
-      if (newPurchase?.purchaseId) {
-        router.push(`/wc/purchases/${newPurchase?.purchaseId}`)
+        const newPurchase = (await createOne.mutateAsync(data))?.[0]
+        if (newPurchase?.purchaseId) {
+          router.push(`/wc/purchases/${newPurchase?.purchaseId}`)
+        }
       }
       toast({
         title: isUpdate ? 'Purchase updated' : 'Purchase created',
@@ -197,7 +188,7 @@ export const PurchaseForm = ({purchase}: Props) => {
                         min={0}
                         className='pl-6'
                         {...field}
-                        value={currencyFormatter.format(value / 100)}
+                        value={value / 100}
                         onChange={(e) => {
                           onChange(Number(e.target.value.replace(/\D/g, '')))
                         }}
@@ -224,7 +215,7 @@ export const PurchaseForm = ({purchase}: Props) => {
                         min={0}
                         className='pl-6'
                         {...field}
-                        value={currencyFormatter.format(value / 100)}
+                        value={value / 100}
                         onChange={(e) => {
                           onChange(Number(e.target.value.replace(/\D/g, '')))
                         }}
