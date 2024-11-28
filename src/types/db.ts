@@ -32,5 +32,11 @@ export const purchaseCompleteSchema = purchaseSchema.extend({
 })
 export type PurchaseComplete = z.infer<typeof purchaseCompleteSchema>
 
+export const purchaseCompleteCreateSchema = purchaseSchema.omit({id: true, userId: true, date: true}).extend({
+  user: userCreateSchema.omit({id: true}),
+  shipping: shippingCreateSchema.omit({id: true, purchaseId: true}),
+})
+export type PurchaseCompleteCreate = z.infer<typeof purchaseCompleteCreateSchema>
+
 export const cardSchema = createSelectSchema(cards)
 export type Card = z.infer<typeof cardSchema>

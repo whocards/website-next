@@ -17,8 +17,6 @@ export default async function PurchaseDetailsPage({params}: Props) {
   const {purchaseId} = await params
   const data = await api.purchases.getById(purchaseId)
 
-  console.log({data})
-
   return (
     <>
       <h1 className='text-3xl font-bold'>Purchase Details</h1>

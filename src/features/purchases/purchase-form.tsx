@@ -13,10 +13,10 @@ import {Input} from '~/components/ui/input'
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '~/components/ui/select'
 import {Separator} from '~/components/ui/separator'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '~/components/ui/tabs'
-import {type PurchaseComplete, purchaseCompleteSchema} from '~/types/db'
+import {type PurchaseComplete, purchaseCompleteCreateSchema, purchaseCompleteSchema} from '~/types/db'
 import {useToast} from '~/hooks/use-toast'
 
-import {categories} from './purchase-constants'
+import {categories, newPurchase} from './purchase-constants'
 import {hasPermission} from '~/lib/permissions'
 import {useSessionUser} from '~/hooks/use-session-user'
 import {api} from '~/trpc/react'
@@ -28,7 +28,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 })
 
 type Props = {
-  purchase: PurchaseComplete
+  purchase?: PurchaseComplete
 }
 
 export const PurchaseForm = ({purchase}: Props) => {
@@ -37,13 +37,18 @@ export const PurchaseForm = ({purchase}: Props) => {
   const router = useRouter()
   const user = useSessionUser()
   const form = useForm<PurchaseComplete>({
-    resolver: zodResolver(purchaseCompleteSchema),
-    defaultValues: purchase,
+    resolver: zodResolver(purchase ? purchaseCompleteSchema : purchaseCompleteCreateSchema),
+    defaultValues: purchase ?? newPurchase,
   })
   const editOne = api.purchases.updateOne.useMutation()
+  const createOne = api.purchases.createOne.useMutation()
 
   const onSubmit = async (data: PurchaseComplete) => {
-    await editOne.mutateAsync(data)
+    if (purchase) {
+      await editOne.mutateAsync(data)
+    } else {
+      await createOne.mutateAsync(data)
+    }
     toast({
       title: 'Purchase updated',
       description: 'The purchase has been updated successfully',
@@ -51,7 +56,7 @@ export const PurchaseForm = ({purchase}: Props) => {
     form.reset(data)
   }
 
-  const canEdit = hasPermission(user, 'purchases', 'edit')
+  const canEdit = hasPermission(user, 'purchases', purchase ? 'edit' : 'create')
 
   return (
     <Form {...form}>
@@ -95,7 +100,7 @@ export const PurchaseForm = ({purchase}: Props) => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder='Abraham Lincoln' type='text' {...field} />
+                    <Input placeholder='name@example.com' type='text' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -119,26 +124,28 @@ export const PurchaseForm = ({purchase}: Props) => {
             <FormField
               name='category'
               control={form.control}
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel className='leading-4'>Category</FormLabel>
-                  <FormControl>
-                    <Select {...field}>
-                      <SelectTrigger>
-                        <SelectValue placeholder='Select a category' />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categories.map((category) => (
-                          <SelectItem key={category} value={category}>
-                            {category}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({field}) => {
+                return (
+                  <FormItem>
+                    <FormLabel className='leading-4'>Category</FormLabel>
+                    <FormControl>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} {...field}>
+                        <SelectTrigger>
+                          <SelectValue placeholder='Select a category'>{field.value}</SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((category) => (
+                            <SelectItem key={category} value={category}>
+                              {category}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
             />
             <FormField
               name='shipping.quantity'
@@ -329,7 +336,13 @@ export const PurchaseForm = ({purchase}: Props) => {
             />
           </TabsContent>
         </Tabs>
-        <div className='ml-auto grid w-full grid-cols-2 gap-2 pb-4 pt-6 md:col-start-2 md:w-1/2 md:gap-4 md:pl-2 md:pr-4'>
+        <div
+          className='ml-auto grid w-full grid-cols-2 gap-2 pb-4 pt-6 md:col-start-2 md:w-1/2 md:gap-4 md:pl-2 md:pr-4'
+          onMouseEnter={() => {
+            void form.trigger()
+            console.log(form)
+          }}
+        >
           <Button variant='destructive' onClick={() => router.back()}>
             Cancel
           </Button>
