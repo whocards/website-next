@@ -3,10 +3,10 @@
 import {signOut} from 'next-auth/react'
 import {redirect} from 'next/navigation'
 import {useEffect} from 'react'
-import {useSessionUser} from '~/hooks/use-session-user'
+import {useUser} from '~/hooks/use-user'
 
 export default function LogoutPage() {
-  const user = useSessionUser()
+  const user = useUser()
 
   useEffect(() => {
     if (user) {

@@ -15,7 +15,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
-import {useSessionUser} from '~/hooks/use-session-user'
+import {useUser} from '~/hooks/use-user'
 import {hasPermission} from '~/lib/permissions'
 import {api} from '~/trpc/react'
 import type {AuthUser} from '~/types/db'
@@ -25,7 +25,7 @@ type Props = {
 }
 
 export const UserRowActions = ({row}: Props) => {
-  const user = useSessionUser()
+  const user = useUser()
   const approveAdminAccessMutation = api.users.approveAdminAccess.useMutation()
   const utils = api.useUtils()
 

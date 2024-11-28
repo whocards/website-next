@@ -18,8 +18,8 @@ import {useToast} from '~/hooks/use-toast'
 
 import {categories, newPurchase} from './purchase-constants'
 import {hasPermission} from '~/lib/permissions'
-import {useSessionUser} from '~/hooks/use-session-user'
-import {api, type RouterOutputs} from '~/trpc/react'
+import {useUser} from '~/hooks/use-user'
+import {api} from '~/trpc/react'
 import {cn} from '~/lib/utils'
 import {parseError} from '~/lib/error'
 
@@ -29,10 +29,10 @@ type Props = {
 
 export const PurchaseForm = ({purchase}: Props) => {
   const isUpdate = !!purchase
-  const [isNameEmailSame, setIsNameEmailSame] = useState(false)
+  const [isNameEmailSame, setIsNameEmailSame] = useState(false) // TODO implement
   const {toast} = useToast()
   const router = useRouter()
-  const user = useSessionUser()
+  const user = useUser()
 
   const editOne = api.purchases.updateOne.useMutation()
   const createOne = api.purchases.createOne.useMutation()
