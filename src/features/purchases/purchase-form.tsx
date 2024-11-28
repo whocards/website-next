@@ -19,8 +19,9 @@ import {useToast} from '~/hooks/use-toast'
 import {categories, newPurchase} from './purchase-constants'
 import {hasPermission} from '~/lib/permissions'
 import {useSessionUser} from '~/hooks/use-session-user'
-import {api} from '~/trpc/react'
+import {api, type RouterOutputs} from '~/trpc/react'
 import {cn} from '~/lib/utils'
+import {parseError} from '~/lib/error'
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -32,31 +33,50 @@ type Props = {
 }
 
 export const PurchaseForm = ({purchase}: Props) => {
+  const isUpdate = !!purchase
   const [isNameEmailSame, setIsNameEmailSame] = useState(false)
   const {toast} = useToast()
   const router = useRouter()
   const user = useSessionUser()
-  const form = useForm<PurchaseComplete>({
-    resolver: zodResolver(purchase ? purchaseCompleteSchema : purchaseCompleteCreateSchema),
-    defaultValues: purchase ?? newPurchase,
-  })
+
   const editOne = api.purchases.updateOne.useMutation()
   const createOne = api.purchases.createOne.useMutation()
 
+  const form = useForm<PurchaseComplete>({
+    resolver: zodResolver(isUpdate ? purchaseCompleteSchema : purchaseCompleteCreateSchema),
+    defaultValues: purchase ?? newPurchase,
+    reValidateMode: 'onBlur',
+  })
+
   const onSubmit = async (data: PurchaseComplete) => {
-    if (purchase) {
-      await editOne.mutateAsync(data)
-    } else {
-      await createOne.mutateAsync(data)
+    data.price = parseInt(`${data.price}`) * 100
+    data.netPrice = parseInt(`${data.netPrice}`) * 100
+
+    let newPurchase: RouterOutputs['purchases']['createOne'][number] | undefined
+    try {
+      if (purchase) {
+        await editOne.mutateAsync(data)
+      } else {
+        newPurchase = (await createOne.mutateAsync(data))?.[0]
+      }
+      if (newPurchase?.purchaseId) {
+        router.push(`/wc/purchases/${newPurchase?.purchaseId}`)
+      }
+      toast({
+        title: isUpdate ? 'Purchase updated' : 'Purchase created',
+        description: `The purchase has been ${isUpdate ? 'updated' : 'created'} successfully`,
+      })
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: isUpdate ? 'Purchase update failed' : 'Purchase creation failed',
+        description: parseError(error),
+      })
     }
-    toast({
-      title: 'Purchase updated',
-      description: 'The purchase has been updated successfully',
-    })
-    form.reset(data)
   }
 
-  const canEdit = hasPermission(user, 'purchases', purchase ? 'edit' : 'create')
+  const canEdit = hasPermission(user, 'purchases', isUpdate ? 'edit' : 'create')
+  const isLoading = editOne.isPending || createOne.isPending
 
   return (
     <Form {...form}>
@@ -175,7 +195,6 @@ export const PurchaseForm = ({purchase}: Props) => {
                       <Input
                         placeholder='Price of items'
                         min={0}
-                        type='currency'
                         className='pl-6'
                         {...field}
                         value={currencyFormatter.format(value / 100)}
@@ -203,7 +222,6 @@ export const PurchaseForm = ({purchase}: Props) => {
                       <Input
                         placeholder='Net Price of items'
                         min={0}
-                        type='currency'
                         className='pl-6'
                         {...field}
                         value={currencyFormatter.format(value / 100)}
@@ -340,17 +358,14 @@ export const PurchaseForm = ({purchase}: Props) => {
           className='ml-auto grid w-full grid-cols-2 gap-2 pb-4 pt-6 md:col-start-2 md:w-1/2 md:gap-4 md:pl-2 md:pr-4'
           onMouseEnter={() => {
             void form.trigger()
-            console.log(form)
+            console.log(form.formState)
           }}
         >
           <Button variant='destructive' onClick={() => router.back()}>
             Cancel
           </Button>
-          <Button
-            type='submit'
-            disabled={!form.formState.isValid || !form.formState.isDirty || editOne.isPending || !canEdit}
-          >
-            Update
+          <Button type='submit' disabled={isLoading || !canEdit || !form.formState.isValid}>
+            {isUpdate ? 'Update' : 'Create'}
           </Button>
         </div>
       </form>

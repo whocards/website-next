@@ -4,10 +4,10 @@ export const categories = ['SuperSpreader', 'Community', 'Friends', 'Gift One'] 
 
 export type Category = (typeof categories)[number]
 
-export const newPurchase: PurchaseCompleteCreate = {
-  category: 'Buy One',
+export const newPurchase: Partial<PurchaseCompleteCreate> = {
+  category: 'Gift One',
   price: 2700,
-  netPrice: 25.78,
+  netPrice: 2578,
   user: {
     email: '',
     name: '',

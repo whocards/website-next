@@ -93,10 +93,12 @@ FormLabel.displayName = 'FormLabel'
 
 const FormControl = React.forwardRef<React.ElementRef<typeof Slot>, React.ComponentPropsWithoutRef<typeof Slot>>(
   ({...props}, ref) => {
-    const {error, formItemId, formDescriptionId, formMessageId} = useFormField()
+    const {error, formItemId, formDescriptionId, formMessageId, name} = useFormField()
+    const {trigger} = useFormContext()
 
     return (
       <Slot
+        onBlur={() => trigger(name)}
         ref={ref}
         id={formItemId}
         aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}

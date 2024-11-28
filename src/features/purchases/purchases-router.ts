@@ -60,9 +60,14 @@ export const purchasesRouter = createTRPCRouter({
     const {price, netPrice, category} = input
 
     return ctx.db.transaction(async (tx) => {
-      const [user] = await tx.insert(users).values(input.user).returning()
+      const [user] = await tx
+        .insert(users)
+        .values(input.user)
+        .onConflictDoUpdate({target: [users.email], set: {name: input.user.name}})
+        .returning()
       if (!user) {
         tx.rollback()
+        // TODO make this a zod error
         throw new TRPCError({code: 'INTERNAL_SERVER_ERROR'})
       }
 
@@ -72,10 +77,14 @@ export const purchasesRouter = createTRPCRouter({
         .returning()
       if (!purchase) {
         tx.rollback()
+        // TODO make this a zod error
         throw new TRPCError({code: 'INTERNAL_SERVER_ERROR'})
       }
 
-      await tx.insert(shippings).values({...input.shipping, purchaseId: purchase.id})
+      return tx
+        .insert(shippings)
+        .values({...input.shipping, purchaseId: purchase.id})
+        .returning()
     })
   }),
 })
