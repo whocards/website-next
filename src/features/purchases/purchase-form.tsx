@@ -17,6 +17,10 @@ import {type PurchaseComplete, purchaseCompleteSchema} from '~/types/db'
 import {useToast} from '~/hooks/use-toast'
 
 import {categories} from './purchase-constants'
+import {hasPermission} from '~/lib/permissions'
+import {useSessionUser} from '~/hooks/use-session-user'
+import {api} from '~/trpc/react'
+import {cn} from '~/lib/utils'
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -31,23 +35,28 @@ export const PurchaseForm = ({purchase}: Props) => {
   const [isNameEmailSame, setIsNameEmailSame] = useState(false)
   const {toast} = useToast()
   const router = useRouter()
+  const user = useSessionUser()
   const form = useForm<PurchaseComplete>({
     resolver: zodResolver(purchaseCompleteSchema),
     defaultValues: purchase,
   })
+  const editOne = api.purchases.updateOne.useMutation()
 
-  const onSubmit = (data: PurchaseComplete) => {
-    console.log(data)
+  const onSubmit = async (data: PurchaseComplete) => {
+    await editOne.mutateAsync(data)
     toast({
       title: 'Purchase updated',
       description: 'The purchase has been updated successfully',
     })
+    form.reset(data)
   }
+
+  const canEdit = hasPermission(user, 'purchases', 'edit')
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='mx-auto w-full max-w-2xl md:rounded-lg md:border'>
-        <Tabs defaultValue='purchase' className='w-full'>
+        <Tabs defaultValue='purchase' className={cn('w-full', !canEdit && 'pointer-events-none')}>
           <TabsList className='grid w-full grid-cols-2 md:rounded-b-none'>
             <TabsTrigger value='purchase'>Purchase</TabsTrigger>
             <TabsTrigger value='shipping'>Shipping</TabsTrigger>
@@ -324,8 +333,11 @@ export const PurchaseForm = ({purchase}: Props) => {
           <Button variant='destructive' onClick={() => router.back()}>
             Cancel
           </Button>
-          <Button type='submit' disabled>
-            Update (not implemented)
+          <Button
+            type='submit'
+            disabled={!form.formState.isValid || !form.formState.isDirty || editOne.isPending || !canEdit}
+          >
+            Update
           </Button>
         </div>
       </form>

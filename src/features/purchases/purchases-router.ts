@@ -4,6 +4,7 @@ import {z} from 'zod'
 import {hasPermission} from '~/lib/permissions'
 import {createTRPCRouter, protectedProcedure} from '~/server/api/trpc'
 import {purchases, users} from '~/server/db/schema'
+import {purchaseCompleteSchema} from '~/types/db'
 
 export const purchasesRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ctx}) => {
@@ -43,5 +44,12 @@ export const purchasesRouter = createTRPCRouter({
         shipping: true,
       },
     })
+  }),
+  updateOne: protectedProcedure.input(purchaseCompleteSchema).mutation(async ({ctx, input}) => {
+    if (!hasPermission(ctx.session?.user, 'purchases', 'edit')) {
+      throw new TRPCError({code: 'UNAUTHORIZED'})
+    }
+
+    return ctx.db.update(purchases).set(input).where(eq(purchases.id, input.id))
   }),
 })
