@@ -3,7 +3,7 @@
 import * as React from 'react'
 
 import {Avatar, AvatarImage, AvatarFallback} from './ui/avatar'
-import {useSessionUser} from '~/hooks/use-session-user'
+import {useUser} from '~/hooks/use-user'
 
 type UserAvatarProps = {
   name?: string | null
@@ -33,7 +33,7 @@ export const CurrentUserAvatar = React.forwardRef<
   React.ElementRef<typeof Avatar>,
   React.ComponentPropsWithoutRef<typeof Avatar>
 >((props, ref) => {
-  const user = useSessionUser()
+  const user = useUser()
 
   return (
     <Avatar ref={ref} {...props}>

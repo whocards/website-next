@@ -7,7 +7,7 @@ import {Label} from '~/components/ui/label'
 import {Separator} from '~/components/ui/separator'
 import Github from '~/assets/icons/github.svg'
 import Google from '~/assets/icons/google.svg'
-import {useSessionUser} from '~/hooks/use-session-user'
+import {useUser} from '~/hooks/use-user'
 import {redirect} from 'next/navigation'
 
 type Props = {
@@ -17,7 +17,7 @@ type Props = {
 }
 
 export const LoginForm = ({signInResend, signInGoogle, signInGithub}: Props) => {
-  const session = useSessionUser()
+  const session = useUser()
 
   if (session) {
     redirect('/me')

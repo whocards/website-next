@@ -5,7 +5,9 @@ import {useState} from 'react'
 import {
   type ColumnDef,
   type ColumnFiltersState,
+  type PaginationState,
   type SortingState,
+  type Updater,
   type VisibilityState,
   flexRender,
   getCoreRowModel,
@@ -22,6 +24,7 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '~/c
 import {DataTablePagination} from './data-table-pagination'
 import {cn} from '~/lib/utils'
 import {usePathname, useRouter} from 'next/navigation'
+import {useTablePageSizeState, useTablePageState, useTableSortingState} from './data-table-query-state'
 // import {DataTableToolbar} from './data-table-toolbar'
 
 interface DataTableProps<TData, TValue> {
@@ -34,22 +37,44 @@ export function DataTable<TData, TValue>({columns, data, rowLink}: DataTableProp
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [sorting, setSorting] = useState<SortingState>([])
   const pathname = usePathname()
   const router = useRouter()
+
+  const [page, setPage] = useTablePageState()
+  const [pageSize, setPageSize] = useTablePageSizeState()
+  const [sorting, setSorting] = useTableSortingState()
+
+  const pagination = {
+    pageIndex: page - 1,
+    pageSize,
+  }
+
+  function onPaginationChange(updaterOrValue: Updater<PaginationState>) {
+    const newPagination = typeof updaterOrValue === 'function' ? updaterOrValue(pagination) : updaterOrValue
+    void setPage(newPagination.pageIndex + 1)
+    void setPageSize(newPagination.pageSize)
+  }
+
+  function onSortingChange(updaterOrValue: Updater<SortingState>) {
+    const newSorting = typeof updaterOrValue === 'function' ? updaterOrValue(sorting ?? []) : updaterOrValue
+    void setSorting(newSorting)
+  }
 
   const table = useReactTable({
     data,
     columns,
     state: {
-      sorting,
+      sorting: sorting ?? undefined,
       columnVisibility,
       rowSelection,
       columnFilters,
+      pagination,
     },
+    enableMultiSort: false,
     enableRowSelection: true,
+    onPaginationChange,
+    onSortingChange,
     onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),

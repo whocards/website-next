@@ -3,6 +3,7 @@
 import {useState} from 'react'
 import {useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
+import {parseAsStringLiteral, useQueryState} from 'nuqs'
 
 import {useRouter} from 'next/navigation'
 import {Button} from '~/components/ui/button'
@@ -18,10 +19,13 @@ import {useToast} from '~/hooks/use-toast'
 
 import {categories, newPurchase} from './purchase-constants'
 import {hasPermission} from '~/lib/permissions'
-import {useSessionUser} from '~/hooks/use-session-user'
-import {api, type RouterOutputs} from '~/trpc/react'
+import {useUser} from '~/hooks/use-user'
+import {api} from '~/trpc/react'
 import {cn} from '~/lib/utils'
 import {parseError} from '~/lib/error'
+
+const tabOptions = ['purchase', 'shipping'] as const
+type TabOption = (typeof tabOptions)[number]
 
 type Props = {
   purchase?: PurchaseComplete
@@ -29,10 +33,11 @@ type Props = {
 
 export const PurchaseForm = ({purchase}: Props) => {
   const isUpdate = !!purchase
-  const [isNameEmailSame, setIsNameEmailSame] = useState(false)
+  const [isNameEmailSame, setIsNameEmailSame] = useState(false) // TODO implement
   const {toast} = useToast()
   const router = useRouter()
-  const user = useSessionUser()
+  const user = useUser()
+  const [tab, setTab] = useQueryState<TabOption>('tab', parseAsStringLiteral(tabOptions).withDefault('purchase'))
 
   const editOne = api.purchases.updateOne.useMutation()
   const createOne = api.purchases.createOne.useMutation()
@@ -72,7 +77,11 @@ export const PurchaseForm = ({purchase}: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='mx-auto w-full max-w-2xl md:rounded-lg md:border'>
-        <Tabs defaultValue='purchase' className={cn('w-full', !canEdit && 'pointer-events-none')}>
+        <Tabs
+          value={tab}
+          onValueChange={(value) => void setTab(value as TabOption)}
+          className={cn('w-full', !canEdit && 'pointer-events-none')}
+        >
           <TabsList className='grid w-full grid-cols-2 md:rounded-b-none'>
             <TabsTrigger value='purchase'>Purchase</TabsTrigger>
             <TabsTrigger value='shipping'>Shipping</TabsTrigger>
@@ -126,7 +135,6 @@ export const PurchaseForm = ({purchase}: Props) => {
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                   <FormLabel className='leading-4'>Subscribe to Newsletter</FormLabel>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -139,20 +147,20 @@ export const PurchaseForm = ({purchase}: Props) => {
                 return (
                   <FormItem>
                     <FormLabel className='leading-4'>Category</FormLabel>
-                    <FormControl>
-                      <Select onValueChange={field.onChange} defaultValue={field.value} {...field}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} {...field}>
+                      <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder='Select a category'>{field.value}</SelectValue>
                         </SelectTrigger>
-                        <SelectContent>
-                          {categories.map((category) => (
-                            <SelectItem key={category} value={category}>
-                              {category}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
+                      </FormControl>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )
@@ -175,26 +183,26 @@ export const PurchaseForm = ({purchase}: Props) => {
             <FormField
               name='price'
               control={form.control}
-              render={({field: {value, onChange, ...field}}) => (
+              render={({field}) => (
                 <FormItem>
                   <FormLabel>Price</FormLabel>
-                  <FormControl>
-                    <div className='relative'>
-                      <span className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 text-sm text-muted-foreground'>
-                        €
-                      </span>
+                  <div className='relative'>
+                    <span className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 text-sm text-muted-foreground'>
+                      €
+                    </span>
+                    <FormControl>
                       <Input
                         placeholder='Price of items'
                         min={0}
                         className='pl-6'
                         {...field}
-                        value={value / 100}
+                        value={field.value / 100}
                         onChange={(e) => {
-                          onChange(Number(e.target.value.replace(/\D/g, '')))
+                          field.onChange(Number(e.target.value.replace(/\D/g, '')))
                         }}
                       />
-                    </div>
-                  </FormControl>
+                    </FormControl>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -202,26 +210,26 @@ export const PurchaseForm = ({purchase}: Props) => {
             <FormField
               name='netPrice'
               control={form.control}
-              render={({field: {value, onChange, ...field}}) => (
+              render={({field}) => (
                 <FormItem>
                   <FormLabel>Net Price</FormLabel>
-                  <FormControl>
-                    <div className='relative'>
-                      <span className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 text-sm text-muted-foreground'>
-                        €
-                      </span>
+                  <div className='relative'>
+                    <span className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 text-sm text-muted-foreground'>
+                      €
+                    </span>
+                    <FormControl>
                       <Input
                         placeholder='Net Price of items'
                         min={0}
                         className='pl-6'
                         {...field}
-                        value={value / 100}
+                        value={field.value / 100}
                         onChange={(e) => {
-                          onChange(Number(e.target.value.replace(/\D/g, '')))
+                          field.onChange(Number(e.target.value.replace(/\D/g, '')))
                         }}
                       />
-                    </div>
-                  </FormControl>
+                    </FormControl>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -347,17 +355,33 @@ export const PurchaseForm = ({purchase}: Props) => {
         </Tabs>
         <div
           className='ml-auto grid w-full grid-cols-2 gap-2 pb-4 pt-6 md:col-start-2 md:w-1/2 md:gap-4 md:pl-2 md:pr-4'
-          onMouseEnter={() => {
-            void form.trigger()
-            console.log(form.formState)
-          }}
+          onMouseEnter={() => void form.trigger()}
         >
-          <Button variant='destructive' onClick={() => router.back()}>
+          <Button
+            variant='destructive'
+            type='button'
+            onClick={(e) => {
+              e.stopPropagation()
+              router.back()
+            }}
+          >
             Cancel
           </Button>
-          <Button type='submit' disabled={isLoading || !canEdit || !form.formState.isValid}>
-            {isUpdate ? 'Update' : 'Create'}
-          </Button>
+          {tab === 'purchase' ? (
+            <Button
+              type='button'
+              onClick={(e) => {
+                e.stopPropagation()
+                void setTab('shipping')
+              }}
+            >
+              Next
+            </Button>
+          ) : (
+            <Button type='submit' disabled={isLoading || !canEdit || !form.formState.isValid}>
+              {isUpdate ? 'Update' : 'Create'}
+            </Button>
+          )}
         </div>
       </form>
     </Form>
