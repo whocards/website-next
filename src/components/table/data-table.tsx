@@ -24,7 +24,7 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '~/c
 import {DataTablePagination} from './data-table-pagination'
 import {cn} from '~/lib/utils'
 import {usePathname, useRouter} from 'next/navigation'
-import {useTablePageSizeState, useTablePageState, useTableSortingState} from './data-table-query-state'
+import {useTableSortingState, useTablePaginationState} from './data-table-query-state'
 // import {DataTableToolbar} from './data-table-toolbar'
 
 interface DataTableProps<TData, TValue> {
@@ -40,23 +40,24 @@ export function DataTable<TData, TValue>({columns, data, rowLink}: DataTableProp
   const pathname = usePathname()
   const router = useRouter()
 
-  const [page, setPage] = useTablePageState()
-  const [pageSize, setPageSize] = useTablePageSizeState()
   const [sorting, setSorting] = useTableSortingState()
-
-  const pagination = {
-    pageIndex: page - 1,
-    pageSize,
-  }
+  const [pagination, setPagination] = useTablePaginationState()
 
   function onPaginationChange(updaterOrValue: Updater<PaginationState>) {
     const newPagination = typeof updaterOrValue === 'function' ? updaterOrValue(pagination) : updaterOrValue
-    void setPage(newPagination.pageIndex + 1)
-    void setPageSize(newPagination.pageSize)
+    void setPagination(newPagination)
   }
 
   function onSortingChange(updaterOrValue: Updater<SortingState>) {
-    const newSorting = typeof updaterOrValue === 'function' ? updaterOrValue(sorting ?? []) : updaterOrValue
+    let newSorting = typeof updaterOrValue === 'function' ? updaterOrValue(sorting ?? []) : updaterOrValue
+    const sortingTypes = newSorting.map((sortedCol) => !!table.getColumn(sortedCol.id)?.columnDef.enableMultiSort)
+    const hasMixedSorting = sortingTypes.some(Boolean) && sortingTypes.some((type) => !type)
+    if (hasMixedSorting) {
+      newSorting = newSorting.slice(-1)
+    }
+    if (newSorting.length > 1 && JSON.stringify(newSorting) === JSON.stringify(sorting)) {
+      newSorting = newSorting.reverse()
+    }
     void setSorting(newSorting)
   }
 
@@ -64,13 +65,12 @@ export function DataTable<TData, TValue>({columns, data, rowLink}: DataTableProp
     data,
     columns,
     state: {
-      sorting: sorting ?? undefined,
+      sorting,
       columnVisibility,
       rowSelection,
       columnFilters,
       pagination,
     },
-    enableMultiSort: false,
     enableRowSelection: true,
     onPaginationChange,
     onSortingChange,
