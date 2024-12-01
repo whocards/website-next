@@ -38,6 +38,7 @@ export const columns: ColumnDef<PurchaseWithUserAndShipping>[] = [
     size: 100,
   },
   {
+    id: 'user_name',
     accessorKey: 'user.name',
     header: ({column}) => <DataTableColumnHeader column={column} title='Name' />,
     // size: Number.MAX_SAFE_INTEGER,
@@ -62,12 +63,14 @@ export const columns: ColumnDef<PurchaseWithUserAndShipping>[] = [
     header: ({column}) => <DataTableColumnHeader column={column} title='Country' />,
     cell: ({row}) => <div>{row.original.shipping.country}</div>,
     enableMultiSort: true,
+    filterFn: (row, id, value) => (value as string[])?.includes(row.getValue(id)),
   },
   {
     accessorKey: 'shipping.city',
     header: ({column}) => <DataTableColumnHeader column={column} title='City' />,
     cell: ({row}) => <div>{row.original.shipping.city}</div>,
     enableMultiSort: true,
+    filterFn: (row, id, value) => (value as string[])?.includes(row.getValue(id)),
   },
   {
     accessorKey: 'price',
@@ -94,7 +97,9 @@ export const columns: ColumnDef<PurchaseWithUserAndShipping>[] = [
   {
     accessorKey: 'date',
     header: ({column}) => <DataTableColumnHeader column={column} title='Date' />,
-    cell: ({row}) => <div>{row.original.date.toLocaleDateString()}</div>,
+    cell: ({row}) => (
+      <div>{row.original.date.toLocaleDateString('de-DE', {year: 'numeric', month: '2-digit', day: '2-digit'})}</div>
+    ),
   },
 
   //   filterFn: (row, id, value) => {
