@@ -61,11 +61,13 @@ export const columns: ColumnDef<PurchaseWithUserAndShipping>[] = [
     accessorKey: 'shipping.country',
     header: ({column}) => <DataTableColumnHeader column={column} title='Country' />,
     cell: ({row}) => <div>{row.original.shipping.country}</div>,
+    enableMultiSort: true,
   },
   {
     accessorKey: 'shipping.city',
     header: ({column}) => <DataTableColumnHeader column={column} title='City' />,
     cell: ({row}) => <div>{row.original.shipping.city}</div>,
+    enableMultiSort: true,
   },
   {
     accessorKey: 'price',
