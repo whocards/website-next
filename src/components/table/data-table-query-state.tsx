@@ -27,14 +27,14 @@ const sortingParser = createParser<SortingState>({
     return value
       .split(',')
       .map((item) => {
-        const [id, desc] = item.split(':')
+        const [id, desc] = item.split('-')
         if (!id) return
         return {id, desc: desc === 'desc'}
       })
       .filter((item) => !!item)
   },
   serialize: (value) => {
-    return value.map((item) => `${item.id}:${item.desc ? 'desc' : 'asc'}`).join(',')
+    return value.map((item) => `${item.id}-${item.desc ? 'desc' : 'asc'}`).join(',')
   },
 })
 
