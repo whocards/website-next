@@ -3,6 +3,7 @@
 
 import {useState} from 'react'
 import {
+  type Column,
   type ColumnDef,
   type ColumnFiltersState,
   type PaginationState,
@@ -25,15 +26,25 @@ import {DataTablePagination} from './data-table-pagination'
 import {cn} from '~/lib/utils'
 import {usePathname, useRouter} from 'next/navigation'
 import {useTableSortingState, useTablePaginationState} from './data-table-query-state'
+import {DataTableToolbar} from './data-table-toolbar'
+import {type DataTableFacetedFilterOptions} from './data-table-faceted-filter'
 // import {DataTableToolbar} from './data-table-toolbar'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   rowLink?: boolean
+  searchColumn?: Column<TData, TValue>['id']
+  filterColumns?: {columnId: Column<TData, TValue>['id']; options: DataTableFacetedFilterOptions}[]
 }
 
-export function DataTable<TData, TValue>({columns, data, rowLink}: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+  rowLink,
+  searchColumn,
+  filterColumns,
+}: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -92,7 +103,7 @@ export function DataTable<TData, TValue>({columns, data, rowLink}: DataTableProp
 
   return (
     <div className='space-y-4'>
-      {/* <DataTableToolbar table={table} /> */}
+      <DataTableToolbar table={table} searchColumn={searchColumn} filterColumns={filterColumns} />
       <div className='rounded-md border'>
         <Table>
           <TableHeader>

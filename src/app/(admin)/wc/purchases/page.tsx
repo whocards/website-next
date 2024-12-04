@@ -6,6 +6,14 @@ import {Button} from '~/components/ui/button'
 import {columns} from '~/features/purchases/purchases-columns'
 import {api} from '~/trpc/server'
 
+import countries from '~/assets/data/countries.json'
+
+const countryOptions = countries.map((country) => ({
+  label: country.name,
+  value: country.iso2,
+  icon: country.emoji,
+}))
+
 export const metadata: Metadata = {
   title: 'WhoCards | Purchases',
   description: 'WhoCards Purchases',
@@ -25,7 +33,13 @@ export default async function AdminPage() {
           </Link>
         </Button>
       </div>
-      <DataTable data={purchases} columns={columns} rowLink />
+      <DataTable
+        data={purchases}
+        columns={columns}
+        rowLink
+        searchColumn='user_name'
+        filterColumns={[{columnId: 'shipping_country', options: countryOptions}]}
+      />
     </>
   )
 }

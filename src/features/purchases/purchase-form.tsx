@@ -86,271 +86,275 @@ export const PurchaseForm = ({purchase}: Props) => {
             <TabsTrigger value='purchase'>Purchase</TabsTrigger>
             <TabsTrigger value='shipping'>Shipping</TabsTrigger>
           </TabsList>
-          <TabsContent value='purchase' className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 md:px-4'>
-            <FormField
-              name='user.name'
-              control={form.control}
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder='Abraham Lincoln' type='text' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name='shipping.company'
-              control={form.control}
-              render={({field: {value, ...field}}) => (
-                <FormItem>
-                  <FormLabel>Company Name</FormLabel>
-                  <FormControl>
-                    <Input type='text' value={value ?? ''} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name='user.email'
-              control={form.control}
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder='name@example.com' type='text' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name='user.newsletter'
-              control={form.control}
-              render={({field}) => (
-                <FormItem className='flex flex-row items-center gap-2 space-y-0 self-end rounded-md border border-transparent py-[11px] md:px-3'>
-                  <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                  <FormLabel className='leading-4'>Subscribe to Newsletter</FormLabel>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Separator className='md:col-span-2' />
-            <FormField
-              name='category'
-              control={form.control}
-              render={({field}) => {
-                return (
+          <TabsContent value='purchase'>
+            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 md:px-4'>
+              <FormField
+                name='user.name'
+                control={form.control}
+                render={({field}) => (
                   <FormItem>
-                    <FormLabel className='leading-4'>Category</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value} {...field}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder='Select a category'>{field.value}</SelectValue>
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {categories.map((category) => (
-                          <SelectItem key={category} value={category}>
-                            {category}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder='Abraham Lincoln' type='text' {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
-                )
-              }}
-            />
-            <FormField
-              name='shipping.quantity'
-              control={form.control}
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>Quantity</FormLabel>
-                  <FormControl>
-                    <Input placeholder='Quantity of items' min={1} type='number' {...field} />
-                  </FormControl>
-                  <FormDescription>TODO connect to category</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name='price'
-              control={form.control}
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>Price</FormLabel>
-                  <div className='relative'>
-                    <span className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 text-sm text-muted-foreground'>
-                      €
-                    </span>
+                )}
+              />
+              <FormField
+                name='user.email'
+                control={form.control}
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder='Price of items'
-                        min={0}
-                        className='pl-6'
-                        {...field}
-                        value={field.value / 100}
-                        onChange={(e) => {
-                          field.onChange(Number(e.target.value.replace(/\D/g, '')))
-                        }}
-                      />
+                      <Input placeholder='name@example.com' type='text' {...field} />
                     </FormControl>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name='netPrice'
-              control={form.control}
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>Net Price</FormLabel>
-                  <div className='relative'>
-                    <span className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 text-sm text-muted-foreground'>
-                      €
-                    </span>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name='shipping.company'
+                control={form.control}
+                render={({field: {value, ...field}}) => (
+                  <FormItem>
+                    <FormLabel>Company Name</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder='Net Price of items'
-                        min={0}
-                        className='pl-6'
-                        {...field}
-                        value={field.value / 100}
-                        onChange={(e) => {
-                          field.onChange(Number(e.target.value.replace(/\D/g, '')))
-                        }}
-                      />
+                      <Input type='text' value={value ?? ''} {...field} />
                     </FormControl>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name='user.newsletter'
+                control={form.control}
+                render={({field}) => (
+                  <FormItem className='flex flex-row items-center gap-2 space-y-0 self-end rounded-md border border-transparent py-[11px] md:px-3'>
+                    <FormControl>
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <FormLabel className='leading-4'>Subscribe to Newsletter</FormLabel>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Separator className='md:col-span-2' />
+              <FormField
+                name='category'
+                control={form.control}
+                render={({field}) => {
+                  return (
+                    <FormItem>
+                      <FormLabel className='leading-4'>Category</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} {...field}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder='Select a category'>{field.value}</SelectValue>
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {categories.map((category) => (
+                            <SelectItem key={category} value={category}>
+                              {category}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )
+                }}
+              />
+              <FormField
+                name='shipping.quantity'
+                control={form.control}
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>Quantity</FormLabel>
+                    <FormControl>
+                      <Input placeholder='Quantity of items' min={1} type='number' {...field} />
+                    </FormControl>
+                    <FormDescription>TODO connect to category</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name='price'
+                control={form.control}
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>Price</FormLabel>
+                    <div className='relative'>
+                      <span className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 text-sm text-muted-foreground'>
+                        €
+                      </span>
+                      <FormControl>
+                        <Input
+                          placeholder='Price of items'
+                          min={0}
+                          className='pl-6'
+                          {...field}
+                          value={field.value / 100}
+                          onChange={(e) => {
+                            field.onChange(Number(e.target.value.replace(/\D/g, '')))
+                          }}
+                        />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name='netPrice'
+                control={form.control}
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>Net Price</FormLabel>
+                    <div className='relative'>
+                      <span className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 text-sm text-muted-foreground'>
+                        €
+                      </span>
+                      <FormControl>
+                        <Input
+                          placeholder='Net Price of items'
+                          min={0}
+                          className='pl-6'
+                          {...field}
+                          value={field.value / 100}
+                          onChange={(e) => {
+                            field.onChange(Number(e.target.value.replace(/\D/g, '')))
+                          }}
+                        />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </TabsContent>
-          <TabsContent value='shipping' className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 md:px-4'>
-            <FormField
-              name='shipping.name'
-              control={form.control}
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input disabled={isNameEmailSame} placeholder='Abraham Lincoln' type='text' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name='shipping.email'
-              control={form.control}
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input disabled={isNameEmailSame} placeholder='name@example.com' type='text' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormItem className='flex flex-row items-center gap-2 space-y-0 self-end rounded-md border border-transparent pb-2 md:col-span-2'>
-              <FormControl>
-                <Checkbox
-                  checked={isNameEmailSame}
-                  onCheckedChange={(checked) => setIsNameEmailSame(checked === true)}
-                />
-              </FormControl>
-              <FormLabel className='leading-4'>Name and email are the same as the purchase information</FormLabel>
-              <FormMessage />
-            </FormItem>
-            <FormField
-              name='shipping.phone'
-              control={form.control}
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>Phone</FormLabel>
-                  <FormControl>
-                    {/* TODO add phone number validation */}
-                    <Input disabled={isNameEmailSame} placeholder='+36706288363' type='text' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name='shipping.address'
-              control={form.control}
-              render={({field}) => (
-                <FormItem className='col-start-1 md:col-span-2'>
-                  <FormLabel>Address</FormLabel>
-                  <FormControl>
-                    <Input type='text' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name='shipping.address2'
-              control={form.control}
-              render={({field: {value, ...field}}) => (
-                <FormItem>
-                  <FormLabel>Address Line 2</FormLabel>
-                  <FormControl>
-                    <Input type='text' value={value ?? ''} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name='shipping.zip'
-              control={form.control}
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>Postal Code</FormLabel>
-                  <FormControl>
-                    <Input type='text' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name='shipping.city'
-              control={form.control}
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>City</FormLabel>
-                  <FormControl>
-                    <Input type='text' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name='shipping.country'
-              control={form.control}
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>Country</FormLabel>
-                  <FormControl>
-                    <ComboboxCountries value={field.value} setValue={field.onChange} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <TabsContent value='shipping'>
+            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 md:px-4'>
+              <FormField
+                name='shipping.name'
+                control={form.control}
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input disabled={isNameEmailSame} placeholder='Abraham Lincoln' type='text' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name='shipping.email'
+                control={form.control}
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input disabled={isNameEmailSame} placeholder='name@example.com' type='text' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormItem className='flex flex-row items-center gap-2 space-y-0 self-end rounded-md border border-transparent pb-2 md:col-span-2'>
+                <FormControl>
+                  <Checkbox
+                    checked={isNameEmailSame}
+                    onCheckedChange={(checked) => setIsNameEmailSame(checked === true)}
+                  />
+                </FormControl>
+                <FormLabel className='leading-4'>Name and email are the same as the purchase information</FormLabel>
+                <FormMessage />
+              </FormItem>
+              <FormField
+                name='shipping.phone'
+                control={form.control}
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      {/* TODO add phone number validation */}
+                      <Input disabled={isNameEmailSame} placeholder='+36706288363' type='text' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name='shipping.address'
+                control={form.control}
+                render={({field}) => (
+                  <FormItem className='col-start-1 md:col-span-2'>
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input type='text' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name='shipping.address2'
+                control={form.control}
+                render={({field: {value, ...field}}) => (
+                  <FormItem>
+                    <FormLabel>Address Line 2</FormLabel>
+                    <FormControl>
+                      <Input type='text' value={value ?? ''} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name='shipping.zip'
+                control={form.control}
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>Postal Code</FormLabel>
+                    <FormControl>
+                      <Input type='text' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name='shipping.city'
+                control={form.control}
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>City</FormLabel>
+                    <FormControl>
+                      <Input type='text' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name='shipping.country'
+                control={form.control}
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>Country</FormLabel>
+                    <FormControl>
+                      <ComboboxCountries value={field.value} setValue={field.onChange} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </TabsContent>
         </Tabs>
         <div

@@ -1,7 +1,8 @@
 import type {PaginationState} from '@tanstack/react-table'
 import {type SortingState} from '@tanstack/react-table'
-import {createParser, useQueryState} from 'nuqs'
+import {createParser, parseAsString, useQueryState} from 'nuqs'
 
+// pagination
 const defaultState: PaginationState = {
   pageIndex: 1,
   pageSize: 10,
@@ -22,6 +23,7 @@ const paginationParser = createParser<PaginationState>({
 
 export const useTablePaginationState = () => useQueryState('page', paginationParser.withDefault(defaultState))
 
+// sorting
 const sortingParser = createParser<SortingState>({
   parse: (value) => {
     return value
@@ -39,3 +41,6 @@ const sortingParser = createParser<SortingState>({
 })
 
 export const useTableSortingState = () => useQueryState('sort', sortingParser.withDefault([]))
+
+// filtering
+export const useTableFilteringState = () => useQueryState('filter', parseAsString.withDefault(''))
